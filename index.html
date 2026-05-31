@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MXXNSAERIN — Chaerin Jang</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Charm:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Orbit&display=swap');
+
+:root {
+  --pink: #FF1493;
+  --pink-light: #ffb3d9;
+  --cyan: #00CCFF;
+  --purple: #8B4FFF;
+  --bg: #ffffff;
+  --bg2: #fafafa;
+  --bg3: #f4f0fa;
+  --text: #1a1230;
+  --text-mid: #4a4060;
+  --text-dim: #9a90b0;
+  --border: #e8e0f0;
+  --border-strong: #d0c8e8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow-x: hidden;
+  font-size: 16px;
+}
+
+/* ══════════════════════════
+   LEFT FLOATING NAV
+══════════════════════════ */
+.sidenav {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  background: transparent;
+}
+
+.sidenav-brand {
+  font-family: 'Orbit', sans-serif;
+  font-size: 11px;
+  color: var(--pink);
+  letter-spacing: 3px;
+  cursor: pointer;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  margin-bottom: 16px;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.sidenav-brand:hover { opacity: 0.7; }
+
+.sidenav-line {
+  width: 1px;
+  height: 32px;
+  background: var(--border-strong);
+  margin: 0 auto 6px;
+  align-self: center;
+  margin-left: 6px;
+}
+
+.sidenav a {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-dim);
+  text-decoration: none;
+  letter-spacing: 1px;
+  cursor: pointer;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  padding: 6px 4px;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+.sidenav a:hover,
+.sidenav a.active { color: var(--pink); }
+
+.sidenav-clock {
+  font-size: 10px;
+  color: var(--text-dim);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 2px;
+  margin-top: 10px;
+  align-self: center;
+  margin-left: 2px;
+}
+
+/* Offset main content */
+body { padding-left: 48px; }
+
+@media(max-width:768px){
+  .sidenav { display: none; }
+  body { padding-left: 0; }
+}
+
+/* ══════════════════════════
+   DESKTOP / HERO
+══════════════════════════ */
+#desktop {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 60px 40px;
+  /* Extend full width behind sidenav (desktop only) */
+  margin-left: -48px;
+  width: calc(100% + 48px);
+  padding-left: 88px; /* 48px offset + original 40px */
+}
+
+/* Hero bg div (parallax target) */
+.hero-bg {
+  position: absolute;
+  inset: -8%;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 30%, rgba(255,120,180,0.82) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 80% 20%, rgba(120,180,255,0.72) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 45% at 60% 75%, rgba(140,220,170,0.68) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 50% at 30% 80%, rgba(200,140,255,0.68) 0%, transparent 50%),
+    radial-gradient(ellipse 45% 40% at 85% 65%, rgba(236, 255, 159, 0.62) 0%, transparent 50%),
+    #fff;
+  animation: gradShift 18s ease-in-out infinite alternate;
+  z-index: 0;
+  transition: transform 0.25s ease-out;
+}
+
+@keyframes gradShift {
+  0%   { opacity: 0.9; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.88; }
+}
+
+/* Soft noise grain */
+.hero-noise {
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+.desktop-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.nameplate-title {
+  font-family: 'Charm', cursive;
+  font-weight: 700;
+  font-size: clamp(56px, 10vw, 120px);
+  color: var(--text);
+  letter-spacing: 8px;
+  line-height: 1;
+  mix-blend-mode: multiply;
+  filter: url(#pixelate);
+}
+
+.nameplate-sub {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: clamp(14px, 2vw, 18px);
+  color: var(--text-mid);
+  letter-spacing: 4px;
+  font-weight: 300;
+}
+
+.desktop-icons {
+  display: flex;
+  gap: 36px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 16px 20px;
+  border: 1px solid rgba(0,0,0,0.03);
+  border-radius: 4px;
+  background: rgba(255,255,255,0.3);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s;
+  user-select: none;
+  min-width: 100px;
+}
+.desktop-icon:hover {
+  border-color: var(--pink);
+  background: rgba(255,255,255,0.9);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(255,20,147,0.15);
+}
+.icon-img { font-size: 40px; }
+.icon-label {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-mid);
+  text-align: center;
+  letter-spacing: 0;
+  word-break: break-all;
+  max-width: 72px;
+  line-height: 1.4;
+}
+
+.scroll-cue {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 4px;
+  animation: cueBlink 2.5s ease-in-out infinite;
+  font-weight: 300;
+}
+@keyframes cueBlink { 0%,100%{opacity:0.3} 50%{opacity:0.9} }
+
+/* ══════════════════════════
+   SECTION WRAPPER
+══════════════════════════ */
+.page-section {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 96px 48px;
+}
+@media(max-width:768px){ .page-section{ padding: 64px 20px; } }
+
+.section-label {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pink);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-family: 'Orbit', sans-serif;
+  font-size: clamp(26px, 4vw, 40px);
+  color: var(--text);
+  letter-spacing: 4px;
+  margin-bottom: 56px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.section-title span {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  font-weight: 400;
+}
+
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+/* ══════════════════════════
+   ARTWORK SCROLL LAYOUT
+══════════════════════════ */
+.artwork-entry {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-bottom: 3px;
+  border: 1px solid var(--border);
+}
+.artwork-entry:nth-child(even) { direction: rtl; }
+.artwork-entry:nth-child(even) > * { direction: ltr; }
+
+.artwork-entry-media {
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  background: var(--bg3);
+  position: relative;
+}
+.artwork-entry-media img,
+.artwork-entry-media-bg {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.artwork-entry:hover .artwork-entry-media img,
+.artwork-entry:hover .artwork-entry-media-bg { transform: scale(1.04); }
+.artwork-entry-media-bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbit', sans-serif;
+  font-size: 16px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 4px;
+}
+
+.artwork-entry-info {
+  padding: 44px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  background: #fff;
+  border-left: 1px solid var(--border);
+}
+.artwork-entry:nth-child(even) .artwork-entry-info {
+  border-left: none;
+  border-right: 1px solid var(--border);
+}
+
+.artwork-index {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text-dim);
+  letter-spacing: 3px;
+}
+.artwork-title {
+  font-family: 'Orbit', sans-serif;
+  font-size: clamp(20px, 2.5vw, 30px);
+  color: var(--text);
+  letter-spacing: 2px;
+  line-height: 1.2;
+}
+.artwork-subtitle {
+  font-size: 14px;
+  color: var(--purple);
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+.artwork-meta { display: flex; flex-direction: column; gap: 6px; }
+.artwork-meta-row {
+  font-size: 13px;
+  color: var(--text-mid);
+  letter-spacing: 0.5px;
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+.artwork-meta-row strong {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--pink);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  min-width: 64px;
+}
+.artwork-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border: 1px solid var(--border-strong);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  border-radius: 2px;
+  font-weight: 400;
+}
+.artwork-desc {
+  font-size: 14px;
+  line-height: 2;
+  color: var(--text-mid);
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  font-weight: 300;
+}
+.artwork-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 10px 22px;
+  background: var(--pink);
+  color: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+  width: fit-content;
+  transition: all 0.15s;
+}
+.artwork-link:hover { background: #cc0f78; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(255,20,147,0.3); }
+
+@media(max-width:900px){
+  .artwork-entry { grid-template-columns: 1fr; direction: ltr; }
+  .artwork-entry:nth-child(even) { direction: ltr; }
+  .artwork-entry-info { padding: 32px 24px; border-left: none !important; border-right: none !important; border-top: 1px solid var(--border); }
+}
+
+/* ══════════════════════════
+   OTHER WORKS GRID
+══════════════════════════ */
+.other-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2px;
+}
+.other-item {
+  background: var(--bg2);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+  overflow: hidden;
+}
+.other-item:hover {
+  border-color: var(--pink);
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(255,20,147,0.08);
+  transform: translateY(-2px);
+}
+.other-item-thumb {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.other-item:hover .other-item-thumb { transform: scale(1.04); }
+.other-item-thumb-placeholder {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: var(--bg3);
+  display: none;
+}
+.other-item-body { padding: 20px 22px 22px; }
+.other-item-year { font-size: 12px; color: var(--pink); font-weight: 700; letter-spacing: 2px; margin-bottom: 8px; }
+.other-item-title { font-family: 'Orbit', sans-serif; font-size: 17px; color: var(--text); letter-spacing: 1px; margin-bottom: 6px; line-height: 1.3; }
+.other-item-sub { font-size: 13px; color: var(--text-dim); letter-spacing: 0.5px; line-height: 1.7; font-weight: 300; }
+
+/* ══════════════════════════
+   PERFORMANCES
+══════════════════════════ */
+.perf-category { margin-bottom: 48px; }
+.perf-category-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cyan);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(0,204,255,0.2);
+}
+.perf-entry {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 20px;
+  align-items: baseline;
+  padding: 10px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.perf-year { font-size: 12px; color: var(--text-dim); letter-spacing: 1px; font-weight: 300; }
+.perf-title { color: var(--text); font-weight: 400; }
+.perf-title em { color: var(--text); font-style: normal; font-weight: 700; }
+.perf-role { font-size: 12px; color: var(--text-dim); letter-spacing: 1px; white-space: nowrap; font-weight: 300; }
+@media(max-width:600px){
+  .perf-entry { grid-template-columns: 48px 1fr; font-size: 13px; }
+  .perf-role { grid-column: 2; }
+}
+
+/* ══════════════════════════
+   CV MODAL (WHITE)
+══════════════════════════ */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(8px);
+  z-index: 8000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.active { display: flex; }
+
+.modal-window {
+  background: #fff;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+  width: 100%;
+  max-width: 720px;
+  max-height: 88vh;
+  overflow-y: auto;
+  animation: modalIn 0.2s ease-out;
+  color: var(--text);
+}
+@keyframes modalIn { from{opacity:0;transform:scale(0.97) translateY(6px)} to{opacity:1;transform:none} }
+
+.modal-titlebar {
+  background: var(--bg2);
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 1;
+}
+.modal-titlebar-name {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 2px;
+}
+.modal-close {
+  width: 24px; height: 24px;
+  border: 1px solid var(--border-strong);
+  color: var(--text-dim);
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; font-family: monospace; border-radius: 2px;
+}
+.modal-close:hover { background: var(--pink); color: #fff; border-color: var(--pink); }
+.modal-body { padding: 32px 36px 40px; }
+
+.cv-lang-toggle {
+  display: flex;
+  gap: 0;
+  margin-bottom: 28px;
+  border: 1px solid var(--border);
+  width: fit-content;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.cv-lang-btn {
+  padding: 8px 20px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  transition: all 0.15s;
+}
+.cv-lang-btn.active { background: var(--pink); color: #fff; }
+
+.cv-bio {
+  font-size: 13px;
+  line-height: 2;
+  color: var(--text);
+  background: #fff8fc;
+  border-left: 3px solid var(--pink);
+  padding: 18px 22px;
+  margin-bottom: 32px;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.cv-section { margin-bottom: 28px; }
+.cv-section h3 {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--pink);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.cv-entry { margin-bottom: 12px; font-size: 14px; line-height: 1.8; color: var(--text); font-weight: 400; }
+.cv-entry strong { font-weight: 700; display: block; }
+.cv-entry span { color: var(--text-dim); font-size: 12px; letter-spacing: 1px; }
+.cv-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border: 1px solid var(--border-strong);
+  font-size: 11px;
+  color: var(--text-mid);
+  letter-spacing: 1px;
+  margin: 3px;
+  border-radius: 2px;
+}
+
+.lang-en { display: block; }
+.lang-ko { display: none; }
+body.lang-ko-active .lang-en { display: none; }
+body.lang-ko-active .lang-ko { display: block; }
+
+/* Contact & Other modal */
+#contact-modal .modal-window { max-width: 420px; }
+.contact-item {
+  display: flex; align-items: center; gap: 18px;
+  padding: 20px 0; border-bottom: 1px solid var(--border);
+  font-size: 15px;
+}
+.contact-item:last-child { border-bottom: none; }
+.contact-icon { font-size: 24px; min-width: 32px; }
+.contact-label { font-size: 12px; font-weight: 700; color: var(--pink); letter-spacing: 2px; margin-bottom: 5px; }
+.contact-value { color: var(--text-mid); }
+.contact-value a { color: var(--cyan); text-decoration: none; }
+.contact-value a:hover { text-decoration: underline; }
+
+#other-modal .modal-window { max-width: 560px; }
+.modal-work-title { font-family: 'Orbit', sans-serif; font-size: 24px; color: var(--text); letter-spacing: 2px; margin-bottom: 6px; }
+.modal-work-sub { font-size: 14px; color: var(--purple); letter-spacing: 1px; margin-bottom: 20px; }
+.modal-work-desc { font-size: 14px; line-height: 2; color: var(--text-mid); font-weight: 300; }
+
+/* ══════════════════════════
+   FOOTER
+══════════════════════════ */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+footer a { color: var(--text-dim); text-decoration: none; }
+footer a:hover { color: var(--pink); }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #f5f5f5; }
+::-webkit-scrollbar-thumb { background: rgba(255,20,147,0.3); }
+
+/* ── CS Highlight ── */
+.cs-highlight {
+  background: linear-gradient(90deg, #FF1493 0%, #FF69B4 50%, #39FF14 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+/* Cursor trail is canvas-based — no CSS class needed */
+
+/* ── Lang toggle in sidenav ── */
+.sidenav-lang {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 2px;
+  padding: 4px 3px;
+  border: 1px solid var(--border-strong);
+  color: var(--text-dim);
+  background: transparent;
+  transition: all 0.15s;
+  margin-top: 6px;
+}
+.sidenav-lang:hover,
+.sidenav-lang.active { color: var(--pink); border-color: var(--pink); }
+
+/* ── Work Detail Modal ── */
+#work-detail-modal .modal-window { max-width: 860px; }
+.work-detail-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  margin-bottom: 24px;
+}
+.work-detail-images .img-main {
+  grid-column: 1 / -1;
+  overflow: hidden;
+}
+.work-detail-images .img-main img { width: 100%; height: auto; display: block; }
+.work-detail-images .img-main .img-placeholder {
+  width: 100%; aspect-ratio: 16/9;
+}
+.work-detail-images .img-sub { overflow: hidden; }
+.work-detail-images .img-sub img { width: 100%; height: auto; display: block; }
+.work-detail-images .img-sub .img-placeholder {
+  width: 100%; aspect-ratio: 4/3;
+}
+.img-placeholder {
+  background: var(--bg3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+}
+.work-detail-meta { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 16px; }
+.work-detail-meta-item { font-size: 13px; color: var(--text-mid); }
+.work-detail-meta-item strong { display: block; font-size: 11px; font-weight: 700; color: var(--pink); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 3px; }
+.work-detail-title { font-family: 'Charm', cursive; font-size: 30px; color: var(--text); margin-bottom: 6px; }
+.work-detail-subtitle { font-size: 14px; color: var(--purple); margin-bottom: 18px; }
+.work-detail-desc { font-size: 14px; line-height: 2; color: var(--text-mid); font-weight: 300; border-top: 1px solid var(--border); padding-top: 18px; }
+
+/* ── Mobile fix ── */
+@media(max-width:768px){
+  #desktop {
+    padding: 60px 28px;
+    margin-left: 0;
+    width: 100%;
+  }
+  .desktop-icons { flex-wrap: nowrap; gap: 8px; width: 100%; }
+  .desktop-icon { min-width: 0; padding: 12px 6px; flex: 1; }
+  .icon-img { font-size: 26px; }
+  .icon-label { font-size: 9px; }
+  .nameplate-title { font-size: clamp(40px, 12vw, 80px); letter-spacing: 4px; }
+  .page-section { padding: 56px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- SVG Filters -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="pixelate" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feFlood x="4" y="4" height="1" width="1"/>
+      <feComposite width="7" height="7"/>
+      <feTile result="tile"/>
+      <feComposite in="SourceGraphic" in2="tile" operator="in"/>
+      <feMorphology operator="dilate" radius="2.5"/>
+    </filter>
+  </defs>
+</svg>
+
+<!-- ══════ SIDE NAV ══════ -->
+<nav class="sidenav" id="sidenav">
+  <a class="sidenav-brand" onclick="goToSection('desktop')">MXXNSAERIN</a>
+  <div class="sidenav-line"></div>
+  <a onclick="goToSection('artwork-main')">Artwork</a>
+  <a onclick="goToSection('other-works')">Other Works</a>
+  <a onclick="goToSection('performances')">Performances</a>
+  <div class="sidenav-clock" id="clock">--:--</div>
+</nav>
+
+<!-- ══════ HERO ══════ -->
+<section id="desktop">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-noise"></div>
+  <div class="desktop-content">
+    <div>
+      <div class="nameplate-title">Mxxnsaerin</div>
+      <div class="nameplate-sub">Chaerin Jang — Media Artist</div>
+    </div>
+    <div class="desktop-icons">
+      <div class="desktop-icon" onclick="goToSection('artwork-main')">
+        <div class="icon-img">🗂️</div>
+        <div class="icon-label">Artwork</div>
+      </div>
+      <div class="desktop-icon" onclick="openModal('cv-modal')">
+        <div class="icon-img">📄</div>
+        <div class="icon-label">CV.txt</div>
+      </div>
+      <div class="desktop-icon" onclick="openModal('contact-modal')">
+        <div class="icon-img">💌</div>
+        <div class="icon-label">Contact.exe</div>
+      </div>
+      <div class="desktop-icon" onclick="window.open('https://mxxnsae.github.io/MascotOracle/','_blank')">
+        <div class="icon-img">🔮</div>
+        <div class="icon-label">???</div>
+      </div>
+    </div>
+    <div class="scroll-cue">▼ &nbsp; scroll &nbsp; ▼</div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════ MAIN ARTWORK ══════ -->
+<section class="page-section" id="artwork-main">
+  <div class="section-label">Portfolio</div>
+  <div class="section-title">Selected Works <span>2021 — 2026</span></div>
+  <div id="mainArtworkList"></div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════ OTHER WORKS ══════ -->
+<section class="page-section" id="other-works">
+  <div class="section-label">Archive</div>
+  <div class="section-title">Other Works</div>
+  <div class="other-grid" id="otherGrid"></div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════ PERFORMANCES ══════ -->
+<section class="page-section" id="performances">
+  <div class="section-label">Credits</div>
+  <div class="section-title">Performances & Commissions</div>
+
+  <div class="perf-category">
+    <div class="perf-category-title">Commissions & Collaborations</div>
+    <div class="perf-entry"><span class="perf-year">2025</span><span class="perf-title">강원특별자치도 스마트연어연구원 미디어아트</span><span class="perf-role">Media Artist</span></div>
+    <div class="perf-entry"><span class="perf-year">2025</span><span class="perf-title">JUSPEACE Foundation 홍보 3D 모션그래픽</span><span class="perf-role">Motion Designer</span></div>
+    <div class="perf-entry"><span class="perf-year">2025</span><span class="perf-title">인천공항 하이커 스테이션 <em>하이커샷</em> XR 배경 & 포토 프레임</span><span class="perf-role">XR Designer</span></div>
+    <div class="perf-entry"><span class="perf-year">2025</span><span class="perf-title">삼성 강남 AI 미디어아트 <em>Samsung Paradigm</em> — Autumn</span><span class="perf-role">Media Artist</span></div>
+    <div class="perf-entry"><span class="perf-year">2024</span><span class="perf-title">국립과천과학관 천체투영관 박새별 단독공연 <em>《Everblooming》</em> 360° 스테이지 미디어</span><span class="perf-role">Direction & Operator</span></div>
+  </div>
+
+  <div class="perf-category">
+    <div class="perf-category-title">Education & Workshops</div>
+    <div class="perf-entry"><span class="perf-year">2024</span><span class="perf-title">서울문화재단 서울시민예술학교 양천 — 어린이 모션캡쳐 움직임 인터랙티브기술 디자인</span><span class="perf-role">Lead Instructor</span></div>
+    <div class="perf-entry"><span class="perf-year">2023</span><span class="perf-title">한국예술종합학교 아트콜라이더랩 AI & 모션캡처 무용 시범 워크숍</span><span class="perf-role">Assistant Instructor</span></div>
+    <div class="perf-entry"><span class="perf-year">2023</span><span class="perf-title">관악청소년축제 청아즐 청티스트 AR필터반</span><span class="perf-role">Mentor</span></div>
+    <div class="perf-entry"><span class="perf-year">2023</span><span class="perf-title">관악문화재단 기술입은 문화예술교육 AI와 함께하는 별별무브 프로그래머반</span><span class="perf-role">Lead Instructor</span></div>
+    <div class="perf-entry"><span class="perf-year">2023</span><span class="perf-title">국립아시아문화전당 문화예술교육 미디어댄스 101</span><span class="perf-role">Assistant Instructor</span></div>
+    <div class="perf-entry"><span class="perf-year">2021–23</span><span class="perf-title">관악문화재단 기술입은 문화예술교육 AI와 함께하는 별별무브</span><span class="perf-role">Assistant Instructor</span></div>
+  </div>
+
+  <div class="perf-category">
+    <div class="perf-category-title">Performances & Events</div>
+    <div class="perf-entry"><span class="perf-year">2026</span><span class="perf-title">아르코예술극장 홍경화현대무용단 <em>《Missing》</em></span><span class="perf-role">Production Assistant</span></div>
+    <div class="perf-entry"><span class="perf-year">2025</span><span class="perf-title">전남도립미술관 《BLACK&BLACK》 전시 연계 공연 — Slit Scan 오디오비주얼</span><span class="perf-role">Operator</span></div>
+    <div class="perf-entry"><span class="perf-year">2025</span><span class="perf-title">대한심미치과학회 KAED 미디어아트</span><span class="perf-role">Assistant</span></div>
+    <div class="perf-entry"><span class="perf-year">2025</span><span class="perf-title">서강대 메리홀 《제37회 현대춤 뉴 제너레이션 페스티벌》</span><span class="perf-role">Assistant</span></div>
+    <div class="perf-entry"><span class="perf-year">2025</span><span class="perf-title">의정부 신세계백화점 《We art! 언제나 보훈 페스티벌》 패션쇼</span><span class="perf-role">Video Operator</span></div>
+    <div class="perf-entry"><span class="perf-year">2025</span><span class="perf-title">올림픽공원 88잔디마당 《코리아 메모리얼 뮤직 페스타》 패션쇼</span><span class="perf-role">Video Operator</span></div>
+    <div class="perf-entry"><span class="perf-year">2024</span><span class="perf-title">모두예술극장 FUTURE WIDE OPEN LAB <em>《에코멜레》</em></span><span class="perf-role">Operator</span></div>
+    <div class="perf-entry"><span class="perf-year">2024</span><span class="perf-title">대전컨벤션센터 G아티언스 2024 커넥팅 위크 — AI 아바타 퍼포먼스</span><span class="perf-role">Assistant</span></div>
+    <div class="perf-entry"><span class="perf-year">2024</span><span class="perf-title">아르코예술극장 서울무용제(경연) 이정연댄스컴퍼니 <em>《숨》</em></span><span class="perf-role">Video Operator</span></div>
+    <div class="perf-entry"><span class="perf-year">2024</span><span class="perf-title">아르코예술극장 임학선댄스위 <em>《Beyond》</em></span><span class="perf-role">Video Operator</span></div>
+    <div class="perf-entry"><span class="perf-year">2024</span><span class="perf-title">대전예술의전당 《카이스트×대전예당 공연실험실 X-SPACE》 Lava Lab</span><span class="perf-role">Co-Director</span></div>
+    <div class="perf-entry"><span class="perf-year">2024</span><span class="perf-title">아르코예술극장 정보경댄스프로덕션 <em>《안녕, 나의 소녀》</em></span><span class="perf-role">Video Operator</span></div>
+    <div class="perf-entry"><span class="perf-year">2023</span><span class="perf-title">국립현대무용단 무용×기술 창작랩 — 박수영 안무가 기술시연</span><span class="perf-role">Assistant</span></div>
+    <div class="perf-entry"><span class="perf-year">2023</span><span class="perf-title">JCC아트센터 <em>《Beyond the Sea》</em> 음악공연</span><span class="perf-role">Assistant</span></div>
+    <div class="perf-entry"><span class="perf-year">2023</span><span class="perf-title">국립극장 《2023 여우락 페스티벌 — SYNERGY》</span><span class="perf-role">Assistant</span></div>
+    <div class="perf-entry"><span class="perf-year">2023</span><span class="perf-title">아트부산 VIP 오프닝 리셉션 미디어아트</span><span class="perf-role">Assistant</span></div>
+    <div class="perf-entry"><span class="perf-year">2022</span><span class="perf-title">플랫폼엘 Mokgilin <em>《Grains of Waves》</em> 음악공연</span><span class="perf-role">Assistant</span></div>
+    <div class="perf-entry"><span class="perf-year">2022</span><span class="perf-title">서강대 메리홀 Yoomique Dance <em>《EDGE》</em> 무용공연</span><span class="perf-role">Operator</span></div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════ FOOTER ══════ -->
+<footer>
+  <span>© 2026 Chaerin Jang (장채린) — All rights reserved</span>
+  <span>
+    <a href="mailto:mxxnsae@gmail.com">mxxnsae@gmail.com</a>
+    &nbsp;·&nbsp;
+    <a href="https://instagram.com/mxxnsaerin" target="_blank">@mxxnsaerin</a>
+  </span>
+</footer>
+
+<!-- ══════ MODALS ══════ -->
+
+<!-- CV -->
+<div class="modal-overlay" id="cv-modal" onclick="handleOverlayClick(event,'cv-modal')">
+  <div class="modal-window">
+    <div class="modal-titlebar">
+      <span class="modal-titlebar-name">CV — Chaerin Jang</span>
+      <button class="modal-close" onclick="closeModal('cv-modal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="cv-lang-toggle">
+        <button class="cv-lang-btn active" onclick="setLang('en',this)">EN</button>
+        <button class="cv-lang-btn" onclick="setLang('ko',this)">KO</button>
+      </div>
+      <div class="cv-bio lang-en">
+        Jang Chaerin (b. 2000) is an artist fascinated by <span class="cs-highlight">Cyber-Saccharine</span> — the artificial sweetness digital systems employ to comfort human deficiency. Unlike real sugar, saccharin provides no sustenance, yet simulates sweetness with far greater intensity. This volatile, replicated sweetness serves as the critical lens through which she examines the interfaces, algorithms, and glitches at the center of her practice.
+      </div>
+      <div class="cv-bio lang-ko">
+        장채린(b. 2000)은 디지털 시스템이 인간의 결핍을 위로하는 방식인 '인공적인 달콤함', 즉 <span class="cs-highlight">사이버 사카린(Cyber-Saccharine)</span>에 매혹되어 이를 탐구하는 아티스트다. 사카린은 설탕과 달리 어떤 영양도 제공하지 않으면서 훨씬 더 강렬한 단맛을 복제해 낸다. 이 휘발적이고 과잉된 달콤함이야말로 그가 인터페이스, 알고리즘, 그리고 글리치를 비판적으로 바라보는 렌즈이자 작업의 핵심 축이다.
+      </div>
+      <div class="cv-section">
+        <h3 class="lang-en">Education</h3><h3 class="lang-ko">학력</h3>
+        <div class="cv-entry lang-en"><strong>B.A. in Interactive Media Design</strong>Hanyang University ERICA, Ansan <span>2019 – 2025</span></div>
+        <div class="cv-entry lang-ko"><strong>한양대학교 ERICA 영상디자인학과 (B.A.)</strong><span>2019. 3. – 2025. 2.</span></div>
+        <div class="cv-entry lang-en"><strong>Dept. of Fine Arts (Design)</strong>Gyeonggi Arts High School, Bucheon <span>Graduated 2019</span></div>
+        <div class="cv-entry lang-ko"><strong>경기예술고등학교 미술과(디자인 전공)</strong><span>2019. 2. 졸업</span></div>
+      </div>
+      <div class="cv-section">
+        <h3 class="lang-en">Experience</h3><h3 class="lang-ko">경력</h3>
+        <div class="cv-entry lang-en"><strong>Founder & Director — Linkirin</strong>Media art studio: interactive installation, generative systems, motion graphics. <span>2025 – Present</span></div>
+        <div class="cv-entry lang-ko"><strong>대표 — Linkirin</strong>인터랙티브 설치, 제너러티브 시스템, 모션그래픽 외주 전문 미디어아트 스튜디오. <span>2025 – 현재</span></div>
+      </div>
+      <div class="cv-section">
+        <h3 class="lang-en">Awards & Exhibitions</h3><h3 class="lang-ko">수상 및 전시</h3>
+        <div class="cv-entry lang-en"><strong>《cat Orpheus》</strong>진진진 Swingby, SAPY, Seoul <span>2024</span></div>
+        <div class="cv-entry lang-ko"><strong>《cat Orpheus》</strong>청년예술청 SAPY 진진진 클럽 공유회 Swingby <span>2024</span></div>
+        <div class="cv-entry lang-en"><strong>《탈(脫)》</strong>Rendez-vous Point, PLLI, Seongsu, Seoul <span>2024</span></div>
+        <div class="cv-entry lang-ko"><strong>《탈(脫)》</strong>성수 PLLI Exhibition 'Rendez-vous Point' <span>2024</span></div>
+        <div class="cv-entry lang-en"><strong>《We Go UP》</strong>Excellence Award — SNUH Multicinewall Competition <span>2022</span></div>
+        <div class="cv-entry lang-ko"><strong>《We Go UP》</strong>서울대학교병원 멀티시네마월 영상작품 공모전 우수상 <span>2022</span></div>
+        <div class="cv-entry lang-en"><strong>《빛-날거야 (光花; bloom-ing)》</strong>Public Choice Award — Gwanghwa Media Mural Competition <span>2022</span></div>
+        <div class="cv-entry lang-ko"><strong>《빛-날거야 (光花; bloom-ing)》</strong>광화시대 광화벽화 미디어아트 영상 공모전 국민참여상 <span>2022</span></div>
+      </div>
+      <div class="cv-section">
+        <h3>Skills</h3>
+        <div style="line-height:2.4;margin-top:4px">
+          <span class="cv-tag">TouchDesigner</span><span class="cv-tag">p5.js</span><span class="cv-tag">Processing</span>
+          <span class="cv-tag">Blender</span><span class="cv-tag">After Effects</span><span class="cv-tag">Premiere Pro</span>
+          <span class="cv-tag">Madmapper</span><span class="cv-tag">Resolume Arena</span><span class="cv-tag">Illustrator</span>
+          <span class="cv-tag">Photoshop</span><span class="cv-tag">Figma</span><span class="cv-tag">Ableton Live</span>
+        </div>
+      </div>
+      <div class="cv-section">
+        <h3 class="lang-en">Languages</h3><h3 class="lang-ko">언어</h3>
+        <div class="cv-entry lang-en">Korean (Native) · English (B2) · French (B1) · Japanese (Intermediate) · Chinese (Intermediate) · German (Beginner)</div>
+        <div class="cv-entry lang-ko">한국어 (모국어) · 영어 (B2) · 프랑스어 (B1) · 일본어 (중급) · 중국어 (중급) · 독일어 (초급)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Contact -->
+<div class="modal-overlay" id="contact-modal" onclick="handleOverlayClick(event,'contact-modal')">
+  <div class="modal-window" style="max-width:400px">
+    <div class="modal-titlebar">
+      <span class="modal-titlebar-name">Contact</span>
+      <button class="modal-close" onclick="closeModal('contact-modal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="contact-item">
+        <div class="contact-icon">✉️</div>
+        <div><div class="contact-label">Email</div><div class="contact-value"><a href="mailto:mxxnsae@gmail.com">mxxnsae@gmail.com</a></div></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📷</div>
+        <div><div class="contact-label">Instagram</div><div class="contact-value"><a href="https://instagram.com/mxxnsaerin" target="_blank">@mxxnsaerin</a></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Work detail modal (Selected Works) -->
+<div class="modal-overlay" id="work-detail-modal" onclick="handleOverlayClick(event,'work-detail-modal')">
+  <div class="modal-window">
+    <div class="modal-titlebar">
+      <span class="modal-titlebar-name" id="wd-label">WORK</span>
+      <button class="modal-close" onclick="closeModal('work-detail-modal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="work-detail-images" id="wd-images"></div>
+      <div class="work-detail-meta" id="wd-meta"></div>
+      <div class="work-detail-title" id="wd-title"></div>
+      <div class="work-detail-subtitle" id="wd-subtitle"></div>
+      <div id="wd-tags" style="margin-bottom:16px"></div>
+      <div class="work-detail-desc" id="wd-desc"></div>
+      <div id="wd-link" style="margin-top:18px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Other work detail -->
+<div class="modal-overlay" id="other-modal" onclick="handleOverlayClick(event,'other-modal')">
+  <div class="modal-window" id="other-modal">
+    <div class="modal-titlebar">
+      <span class="modal-titlebar-name" id="other-modal-label">Work</span>
+      <button class="modal-close" onclick="closeModal('other-modal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-work-title" id="other-modal-title"></div>
+      <div class="modal-work-sub" id="other-modal-sub"></div>
+      <div id="other-modal-tags" style="margin-bottom:16px"></div>
+      <div class="modal-work-desc" id="other-modal-desc"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const mainWorks = [
+  { id:'gaksi', idx:'01', title:'Gaksi Dokkaebi', subtitle:'각시도깨비: Embodied Folklore Interface', year:'2026', medium:'Generative Stage Projection Mapping', tags:['TouchDesigner','Audiovisual Performance','Upcoming'], color:'linear-gradient(135deg,#1a0033,#050030,#000d20)', img:'images/thumb_gaksi.png', images:['images/detail_gaksi_1.png','images/detail_gaksi_2.png','images/detail_gaksi_3.png'], desc:'The <em>Gaksi Dokkaebi</em> — a shape-shifting goblin from Korean folklore — reborn as a cybershamanic generative system. The work deconstructs the classical Korean court painting <em>Irworobongdo (日月五峯圖)</em>, splitting its cosmology across two physically separated stage columns. Fluid dynamics and particle systems respond in real time to the dancer\'s movement. Naejeon-chilgi holographic textures unify the visual field into something between ancient ritual object and malfunctioning hallucination.', url:null },
+  { id:'kirin', idx:'02', title:'Kirin: The Sacred Beast of Error', subtitle:'기린: 오류의 영수', year:'2026', medium:'Interactive Kinetic Sculpture · Cybernetic Assemblage', tags:['Physical Computing','TouchDesigner','Work in Progress'], color:'linear-gradient(135deg,#1a0010,#0d001a,#001010)', img:'images/thumb_kirin.png', images:['images/detail_kirin_1.png','images/detail_kirin_2.png','images/detail_kirin_3.png','images/detail_kirin_4.png'], desc:'A Western toy rocking horse given the skull of a raptor and reborn as the <em>Kirin</em> — the sacred Eastern beast of auspicious omen. When an audience member shakes the creature, the MPU6050 sensor transmits live acceleration data to TouchDesigner, where it is processed into glitch error logs pixel-mapped onto a TFT display inside the acrylic core: divinity rendered as malfunction.', url:null },
+  { id:'oracle', idx:'03', title:'Mascot Oracle: The Sweet Deception', subtitle:'마스코트 신탁: 달콤한 기만', year:'2026', medium:'Interactive Web Interface · Data Art', tags:['HTML/CSS/JS','Speculative Design','Live'], color:'linear-gradient(135deg,#1a0020,#000d20,#1a0010)', img:'images/thumb_oracle.png', images:['images/detail_oracle_1.png','images/detail_oracle_2.png','images/detail_oracle_3.png','images/detail_oracle_4.png','images/detail_oracle_5.png'], desc:'A web-based interactive artwork exploring how humans voluntarily surrender to systems in exchange for the pleasure of order. The kitschy Y2K interface receives birth data, performs a fake <em>saju</em> (四柱) analysis, and returns an elaborately formatted fortune alongside a generative talisman. Everything is fabricated — and the audience knows, and submits anyway.', url:'https://mxxnsae.github.io/MascotOracle/' },
+  { id:'everblooming', idx:'04', title:'Everblooming', subtitle:'박새별 단독공연 《Everblooming》 360° Stage Media', year:'2024', medium:'360° Planetarium Stage Media', tags:['TouchDesigner','Resolume Arena','Live Performance'], color:'linear-gradient(135deg,#000d33,#0d001a,#000a1a)', img:'images/thumb_everblooming.gif', images:['images/detail_everblooming_1.png','images/detail_everblooming_2.png'], desc:'Commissioned for Park Saebyeol\'s solo concert inside the Gwacheon planetarium dome. A purple butterfly is the visual protagonist across two consecutive songs — its afterimages dissolving in <em>사라지는 것들</em>, and flying endlessly toward an unreachable moon in <em>낙원</em>. The ground perimeter pulses as a real-time acoustic waveform. The visual system flows without seam so that disappearance and paradise feel like movements of a single arc.', url:null },
+  { id:'tal', idx:'05', title:'탈(脫)', subtitle:'Tal — Escape / Shedding', year:'2024', medium:'Audience-Participatory Performance Video Installation', tags:['Motion Capture','Projection Mapping','Collaboration'], color:'linear-gradient(135deg,#0d0d0d,#0a0a18,#0d0d1a)', img:'images/thumb_tal.png', images:['images/detail_tal_1.png','images/detail_tal_2.png','images/detail_tal_3.png'], desc:'A co-created audience-participatory performance in which a dancer and audience members build the work together in real time. Participants can directly alter elements of the theatrical vocabulary at key moments, making the escalation of tension a shared responsibility. Premiered at Chuncheon Performing Arts Startup Support Centre (HABTHON 2024); exhibited at <em>Rendez-vous Point</em>, PLLI, Seoul.', url:null },
+  { id:'blooming', idx:'06', title:'빛-날거야 (光花; bloom-ing)', subtitle:'Glow & Grow', year:'2021–2022', medium:'Public Media Art', tags:['After Effects','Blender','Public Art','Award'], color:'linear-gradient(135deg,#1a0808,#1a0d00,#141000)', img:'images/thumb_blooming.png', images:['images/detail_blooming_1.png','images/detail_blooming_2.png','images/detail_blooming_3.png'], desc:'Public media artwork for the Gwanghwamun Media Mural Competition, awarded the Public Choice Award. Three visual stages trace the arc from wintry hardship through rising hope to vivid future. An anamorphic technique unifies interior volume, exterior screen, and architectural gaps into a single spatial illusion. Team project (3 members; contribution: 40%).', url:null },
+  { id:'ssyh', idx:'07', title:'움직임에서 발견하기: 점·선·면', subtitle:'Discovering Points, Lines & Planes through Movement', year:'2024', medium:'Interactive Technology Design for Children', tags:['p5.js','TouchDesigner','Education'], color:'linear-gradient(135deg,#001a0a,#00001a,#001018)', img:'images/thumb_ssyh.gif', images:['images/detail_ssyh_1.gif','images/detail_ssyh_2.png'], desc:'Interactive educational experiences for a children\'s motion-capture programme in which abstract visual concepts — point, line, plane — are taught through physical movement and real-time generative response. Developed for the Seoul Foundation for Arts and Culture\'s Seoul Citizen Arts School, Yangcheon.', url:null },
+  { id:'syrup', idx:'08', title:'Syrup Ghost in the Camera', subtitle:'카메라 속 시럽 유령', year:'2025–2026', medium:'Live Interactive Video Installation · Computer Vision', tags:['TouchDesigner','Frame Differencing','Displace'], color:'linear-gradient(135deg,#1a0018,#0d0010,#00101a)', img:'images/thumb_syrup.png', images:['images/detail_syrup_1.png','images/detail_syrup_2.png','images/detail_syrup_3.png'], desc:'A live interactive installation materialising the invisible residue between a body and its image. Frame differencing isolates movement as a data field; a Displace operator warps the image to produce viscous, dripping fields of hot pink and neon cyan. Every time a viewer moves, they leave a syrup-coloured afterimage: sticky, sweet, and slowly dissolving.', url:null },
+];
+
+const otherWorks = [
+  { title:'《cat Orpheus》', sub:'청년예술청 SAPY 진진진 클럽 공유회 Swingby', year:'2024', tags:['TouchDesigner','Collaboration'], img:'images/thumb_cat.png', images:['images/detail_cat_1.png','images/detail_cat_2.png'], desc:'Two-person collaborative work exhibited at SAPY 진진진 Club Swingby. TouchDesigner visuals by Chaerin Jang; music and kinetic art by collaborator.' },
+  { title:'《We Go UP (Unlimited Possibility)》', sub:'Excellence Award · SNUH Multicinewall', year:'2022', tags:['Video Art','Award'], img:'images/thumb_wegoup.png', images:['images/detail_wegoup_1.png','images/detail_wegoup_2.png'], desc:'Excellence Award at the Seoul National University Hospital Multicinewall Media Art Competition. Selected for display in the hospital\'s public multichannel cinema wall.' },
+  { title:'Samsung Paradigm — Autumn Section', sub:'삼성 강남 AI 미디어아트', year:'2025', tags:['AI Media Art','Large-scale'], img:'images/thumb_samsung.png', images:['images/detail_samsung_1.png','images/detail_samsung_2.png'], desc:'Contribution to a large-scale AI media art installation at Samsung Gangnam. Responsible for the Autumn section: generative urban autumn scenery.' },
+  { title:'강원특별자치도 스마트연어연구원', sub:'Site-specific Media Art Commission', year:'2025', tags:['Media Art','Commission'], img:'', images:[], desc:'Commissioned media artwork for the Gangwon Province Smart Salmon Research Institute.' },
+  { title:'JUSPEACE Foundation', sub:'3D Motion Graphics', year:'2025', tags:['Motion Graphics','3D'], img:'', images:[], desc:'Promotional 3D motion graphics for the JUSPEACE Foundation (juspeacefoundation.ai).' },
+];
+
+function renderMain() {
+  const container = document.getElementById('mainArtworkList');
+  mainWorks.forEach(work => {
+    const entry = document.createElement('div');
+    entry.className = 'artwork-entry';
+
+    const media = document.createElement('div');
+    media.className = 'artwork-entry-media';
+    const img = new Image();
+    img.src = work.img;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+    img.onerror = () => {
+      const bg = document.createElement('div');
+      bg.className = 'artwork-entry-media-bg';
+      bg.style.background = work.color;
+      bg.textContent = work.title.toUpperCase();
+      media.appendChild(bg);
+    };
+    img.onload = () => { media.innerHTML = ''; media.appendChild(img); };
+    media.appendChild(img);
+
+    const info = document.createElement('div');
+    info.className = 'artwork-entry-info';
+    info.innerHTML = `
+      <div class="artwork-index">${work.idx} / ${String(mainWorks.length).padStart(2,'0')}</div>
+      <div class="artwork-title">${work.title}</div>
+      <div class="artwork-subtitle">${work.subtitle}</div>
+      <div class="artwork-meta">
+        <div class="artwork-meta-row"><strong>Year</strong>${work.year}</div>
+        <div class="artwork-meta-row"><strong>Medium</strong>${work.medium}</div>
+      </div>
+      <div class="artwork-tags">${work.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <div class="artwork-desc">${work.desc}</div>
+      ${work.url ? `<a class="artwork-link" href="${work.url}" target="_blank" rel="noopener">▶ VIEW WORK</a>` : ''}
+    `;
+    entry.style.cursor = 'pointer';
+    entry.onclick = () => openWorkDetail(work);
+    entry.appendChild(media);
+    entry.appendChild(info);
+    container.appendChild(entry);
+  });
+}
+
+function openWorkDetail(work) {
+  document.getElementById('wd-label').textContent = work.idx || work.year || 'WORK';
+  document.getElementById('wd-title').textContent = work.title;
+  document.getElementById('wd-subtitle').textContent = work.subtitle;
+  document.getElementById('wd-meta').innerHTML = `
+    <div class="work-detail-meta-item"><strong>Year</strong>${work.year}</div>
+    <div class="work-detail-meta-item"><strong>Medium</strong>${work.medium}</div>
+  `;
+  document.getElementById('wd-tags').innerHTML = work.tags.map(t => `<span class="tag">${t}</span>`).join('');
+  document.getElementById('wd-desc').innerHTML = work.desc;
+  document.getElementById('wd-link').innerHTML = work.url
+    ? `<a class="artwork-link" href="${work.url}" target="_blank" rel="noopener">▶ VIEW WORK</a>` : '';
+
+  // Build images grid
+  const imgContainer = document.getElementById('wd-images');
+  imgContainer.innerHTML = '';
+  const allImgs = [work.img, ...(work.images || [])].filter(Boolean);
+  allImgs.forEach((src, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = i === 0 ? 'img-main' : 'img-sub';
+    const img = new Image();
+    img.src = src;
+    img.alt = work.title;
+    img.onerror = () => {
+      const ph = document.createElement('div');
+      ph.className = 'img-placeholder';
+      ph.textContent = i === 0 ? work.title.toUpperCase() : '↑';
+      wrap.appendChild(ph);
+    };
+    img.onload = () => { wrap.innerHTML = ''; wrap.appendChild(img); };
+    wrap.appendChild(img);
+    imgContainer.appendChild(wrap);
+  });
+
+  openModal('work-detail-modal');
+}
+
+function renderOther() {
+  const grid = document.getElementById('otherGrid');
+  otherWorks.forEach(work => {
+    const item = document.createElement('div');
+    item.className = 'other-item';
+
+    let thumbHTML = '';
+    if (work.img) {
+      thumbHTML = `<img class="other-item-thumb" src="${work.img}" alt="${work.title}" onerror="this.style.display='none'">`;
+    }
+
+    item.innerHTML = `
+      ${thumbHTML}
+      <div class="other-item-body">
+        <div class="other-item-year">${work.year}</div>
+        <div class="other-item-title">${work.title}</div>
+        <div class="other-item-sub">${work.sub}</div>
+      </div>
+    `;
+    item.onclick = () => openWorkDetail({
+      idx: work.year,
+      title: work.title,
+      subtitle: work.sub,
+      year: work.year,
+      medium: work.tags.join(' · '),
+      tags: work.tags,
+      img: work.img,
+      images: work.images || [],
+      desc: work.desc,
+      url: null,
+    });
+    grid.appendChild(item);
+  });
+}
+
+function openModal(id) { document.getElementById(id).classList.add('active'); document.body.style.overflow='hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow=''; }
+function handleOverlayClick(e, id) { if(e.target===document.getElementById(id)) closeModal(id); }
+
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape') ['cv-modal','contact-modal','other-modal','work-detail-modal'].forEach(closeModal);
+});
+
+function setLang(lang, btn) {
+  // CV modal internal toggle (syncs with global)
+  document.querySelectorAll('.cv-lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyLang(lang);
+}
+
+function applyLang(lang) {
+  const isKo = lang === 'ko';
+  isKo ? document.body.classList.add('lang-ko-active') : document.body.classList.remove('lang-ko-active');
+  document.querySelectorAll('.cv-lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim() === (isKo ? 'KO' : 'EN'));
+  });
+}
+
+function goToSection(id) {
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
+function updateClock() {
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const el = document.getElementById('clock');
+  if (el) el.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+renderMain();
+renderOther();
+
+// ── PIXEL FILTER RESPONSIVE ────────────────────────────────
+function updatePixelRadius() {
+  const el = document.querySelector('#pixelate feMorphology');
+  if (!el) return;
+  const w = window.innerWidth;
+  const r = w < 480 ? 1.2 : w < 768 ? 1.8 : 2.5;
+  el.setAttribute('radius', r);
+}
+updatePixelRadius();
+window.addEventListener('resize', updatePixelRadius);
+
+// ── CANVAS CURSOR TRAIL ────────────────────────────────────
+const trailCanvas = document.createElement('canvas');
+trailCanvas.style.cssText = 'position:fixed;top:0;left:0;pointer-events:none;z-index:99998;';
+document.body.appendChild(trailCanvas);
+const tCtx = trailCanvas.getContext('2d');
+function resizeTrailCanvas() {
+  trailCanvas.width = window.innerWidth;
+  trailCanvas.height = window.innerHeight;
+}
+resizeTrailCanvas();
+window.addEventListener('resize', resizeTrailCanvas);
+
+const TRAIL_COLORS = ['#FF1493','#FFA1CE','#FFFFFF','#39FF14','#00CCFF','#FF1493'];
+const trailPts = [];
+let tIdx = 0;
+
+document.addEventListener('mousemove', e => {
+  trailPts.push({ x: e.clientX, y: e.clientY, age: 0, color: TRAIL_COLORS[tIdx++ % TRAIL_COLORS.length] });
+  if (trailPts.length > 60) trailPts.shift();
+});
+
+(function drawTrail() {
+  tCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+  for (let i = trailPts.length - 1; i >= 0; i--) {
+    const p = trailPts[i];
+    p.age += 1.2;
+    const life = Math.max(0, 1 - p.age / 25);
+    if (life <= 0) { trailPts.splice(i, 1); continue; }
+    const r = 14 * life + 3;
+    const grad = tCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
+    grad.addColorStop(0, p.color + Math.floor(life * 180).toString(16).padStart(2,'0'));
+    grad.addColorStop(1, p.color + '00');
+    tCtx.beginPath();
+    tCtx.arc(p.x, p.y, r, 0, Math.PI * 2);
+    tCtx.fillStyle = grad;
+    tCtx.fill();
+  }
+  requestAnimationFrame(drawTrail);
+})();
+
+// ── HERO PARALLAX ─────────────────────────────────────────
+const heroSection = document.getElementById('desktop');
+const heroBgEl = document.getElementById('heroBg');
+heroSection.addEventListener('mousemove', e => {
+  const rect = heroSection.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width  - 0.5) * 65;
+  const y = ((e.clientY - rect.top)  / rect.height - 0.5) * 50;
+  heroBgEl.style.transform = `translate(${x}px, ${y}px)`;
+});
+heroSection.addEventListener('mouseleave', () => {
+  heroBgEl.style.transform = '';
+});
+
+</script>
+</body>
+</html>

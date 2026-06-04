@@ -1,0 +1,55 @@
+======================================
+ARTIST STATEMENT - CHAERIN JANG
+======================================
+
+[ENGLISH VERSION]
+
+Jang Chaerin (b. 2000) is an artist fascinated by a contradiction: when people become aware of an interactive system watching them, their movements become constrained. Yet the less they think about the screen, the freer they move—and the more effectively the system shapes them. Interfaces work best when invisible. But here's the paradox: we don't want them to be visible. We prefer the comfort of not knowing.
+
+This insight came from watching dancers and children interact with media systems. She noticed: when you forget the screen exists, your body moves freely. But the moment you become conscious of being watched, you freeze. The system controls us most effectively when we're unaware of its presence. This is Cyber-Saccharine—the artificial sweetness that interfaces employ to make us forget the machinery behind them. Unlike real sugar, it provides no sustenance. Yet its taste is intense and immediate, and we crave it anyway.
+
+But what happens when that sweetness cracks? When the system glitches, when the illusion breaks, when we glimpse the algorithm behind the comfort? In Mascot Oracle, a divination interface designed to feel reassuring occasionally stutters, revealing its own falseness. In Ectoplasm, a real-time face-detection filter doesn't recognize faces at all—it hallucinates them, seeing presence where none exists. These aren't failures. They're moments where the machinery becomes visible, where the comfort dissolves and we see what the system actually is: error, approximation, glitch.
+
+In Gaksi Dokkaebi, a classical cosmological painting is deconstructed into a digital glitch. In Kirin, physical motion is translated into error logs displayed as divinity. These works ask: what if we stopped trying to hide the algorithm's failures and instead made them visible? What if the glitch is the truth?
+
+Yet Ectoplasm reveals something deeper. A surveillance system hallucinates—it sees faces that aren't there, creates presence from nothing. This echoes 19th-century spiritualism: séances also promised to make the invisible visible, to conjure presence. Both are systems that fail to see truly, yet we believe them anyway. The sweetness persists even when we see the machinery.
+
+Yet there's another question beneath these investigations: What happens after we see through the illusion?
+
+In EXISTENCE&SURREALITY, she explores the paradox that defines technology itself. Nature exists as pure meaning. We have developed through imitation, reproduction, and transformation of the natural world. But in that process of artificialization—of creating copies, systems, and algorithms—something unexpected happens. Through the artificial, we don't just replicate nature. We dream beyond it. We discover new forms of meaning, new possibilities that wouldn't exist without the very machinery we've exposed as false.
+
+This is the paradox at the heart of all her work. We expose the glitch. We reveal the algorithm. We see that the system is artificial, incomplete, constructed. And yet—through that exposure, through that artificial medium—we discover something real. The sweetness was never the lie. The sweetness was the access point to a truth we couldn't reach otherwise.
+
+At Kunstuniversität Linz, she wants to deepen this investigation. How do we move beyond critique? Once we've exposed the machinery, once we understand the game—do we simply reject it? Or do we learn to dream differently within it?
+
+She works across TouchDesigner, computer vision, generative systems, and physical computing—treating malfunction not as error, but as revelation. Each interface is a system of choices. Each glitch exposes those choices. The question is simply: Once the machinery is visible, what do we do with that knowledge? And what new meanings can we build from what we've exposed?
+
+
+======================================
+
+[한국어 버전]
+
+장채린(b. 2000)은 다음의 역설에 매혹된 아티스트다. 사람들이 자신을 지켜보는 인터랙티브 시스템을 인식하는 순간, 움직임이 제약된다. 반대로 화면을 의식하지 않을수록 더 자유로운 움직임이 나온다—그리고 그럴수록 시스템이 우리를 더 효과적으로 형성한다. 인터페이스는 보이지 않을 때 가장 잘 작동한다. 하지만 여기 역설이 있다: 우리는 그것이 보이길 원하지 않는다. 우리는 알지 못하는 것의 편안함을 선호한다.
+
+이 통찰은 무용수들과 아이들이 미디어 시스템과 상호작용하는 것을 지켜보면서 얻어졌다. 그는 다음을 발견했다: 화면의 존재를 잊을 때, 몸은 자유롭게 움직인다. 하지만 자신이 지켜지고 있다는 것을 인식하는 순간, 동작은 경직된다. 시스템은 우리가 그것의 존재를 의식하지 못할 때 가장 효과적으로 우리를 통제한다. 이것이 '사이버 사카린(Cyber-Saccharine)'이다—인터페이스가 우리로 하여금 그 뒤의 기계를 잊게 만드는 인공적인 달콤함. 사카린은 설탕과 달리 영양을 제공하지 않는다. 하지만 그 맛은 즉각적이고 강렬하며, 우리는 그것을 갈망한다.
+
+하지만 그 달콤함이 깨질 때는 어떻게 될까? 시스템이 글리치할 때, 환상이 깨질 때, 편안함 뒤의 알고리즘을 보게 될 때? 《마스코트 신탁》에서 안심감을 주도록 설계된 점사 인터페이스는 때때로 말을 더듬으며 자신의 거짓성을 드러낸다. 《에토플라즘》에서 실시간 얼굴 인식 필터는 얼굴을 인식하지 못한다—대신 그것을 환각하며, 존재하지 않는 곳에 현존을 본다. 이것들은 실패가 아니다. 기계가 보이는 순간들이며, 편안함이 사라지고 우리가 시스템의 참모습을 보게 되는 순간들이다: 오류, 근사, 글리치.
+
+《각시도깨비》에서는 고전 우주 회화가 디지털 글리치로 해체된다. 《기린: 오류의 영수》에서는 물리적 움직임이 신성함으로 표현된 오류 로그로 번역된다. 이 작업들이 묻는 것은: 알고리즘의 실패를 숨기려 하지 말고 대신 그것을 가시화하면 어떨까? 글리치가 진실이라면?
+
+하지만 《에토플라즘》은 더 깊은 층을 드러낸다. 감시 시스템이 환각한다—존재하지 않는 곳에 얼굴을 본다, 무형의 것에서 현존을 만들어낸다. 이것은 19세기 영강술과 메아리친다: 강령술도 보이지 않는 것을 보이게 하고, 현존을 불러내겠다고 약속했다. 둘 다 진실되게 보지 못하는 시스템인데도, 우리는 계속 믿는다. 달콤함은 기계를 봤을 때도 사라지지 않는다.
+
+그런데 이 모든 탐구 아래에 또 다른 질문이 숨어 있다: 환상을 꿰뚫어본 후는 어떻게 될까?
+
+《존재와 초현실(EXISTENCE&SURREALITY)》에서 그는 기술 자체를 규정하는 역설을 탐구한다. 자연은 순수한 실존 그 자체로 의미를 갖는다. 우리는 자연의 모방, 재현, 변형을 통해 발전해왔다. 하지만 그 인공화 과정—복사본, 시스템, 알고리즘을 만드는 과정—에서 뭔가 예상 밖의 일이 일어난다. 인공을 통해 우리는 단지 자연을 복제하지 않는다. 우리는 그 너머를 꿈꾼다. 우리가 거짓임을 노출한 바로 그 기계 없이는 존재할 수 없는 새로운 의미와 가능성을 발견한다.
+
+이것이 그의 모든 작업의 중심에 있는 역설이다. 우리는 글리치를 노출한다. 우리는 알고리즘을 드러낸다. 우리는 시스템이 인공적이고, 불완전하고, 구성된 것임을 안다. 그런데도—그 노출을 통해, 그 인공적인 매체를 통해—우리는 뭔가 진정한 것을 발견한다. 달콤함은 거짓이 아니었다. 달콤함은 우리가 다른 방식으로는 도달할 수 없는 진실로의 접근점이었다.
+
+린츠예술대학교에서 그는 이 탐구를 심화하고자 한다. 우리는 비판을 어떻게 넘어갈 것인가? 기계를 노출했고, 게임을 이해했을 때—단순히 그것을 거부할까? 아니면 그 안에서 다르게 꿈꾸는 법을 배울까?
+
+그는 TouchDesigner, 컴퓨터 비전, 제너러티브 시스템, 물리 컴퓨팅을 다룬다—오작동을 오류가 아닌 계시로 취급하며. 모든 인터페이스는 선택의 시스템이다. 모든 글리치는 그 선택들을 노출한다. 질문은 단순하다: 기계가 보이는 순간, 우리는 그 지식을 어떻게 할 것인가? 그리고 우리가 노출한 것으로부터 어떤 새로운 의미를 만들어낼 수 있는가?
+
+
+======================================
+Last Updated: 2026.06.04
+======================================

@@ -1339,15 +1339,16 @@ const heroSection = document.getElementById('desktop');
 const heroBgEl = document.getElementById('heroBg');
 const desktopContent = document.querySelector('.desktop-content');
 
-heroSection.addEventListener('mousemove', e => {
-  const rect = heroSection.getBoundingClientRect();
-  const x = ((e.clientX - rect.left) / rect.width  - 0.5) * 65;
-  const y = ((e.clientY - rect.top)  / rect.height - 0.5) * 50;
-  heroBgEl.style.transform = `translate(${x}px, ${y}px)`;
-});
-heroSection.addEventListener('mouseleave', () => {
-  heroBgEl.style.transform = '';
-});
+// Subtle parallax - greatly reduced or removed
+// heroSection.addEventListener('mousemove', e => {
+//   const rect = heroSection.getBoundingClientRect();
+//   const x = ((e.clientX - rect.left) / rect.width  - 0.5) * 8;
+//   const y = ((e.clientY - rect.top)  / rect.height - 0.5) * 6;
+//   heroBgEl.style.transform = `translate(${x}px, ${y}px)`;
+// });
+// heroSection.addEventListener('mouseleave', () => {
+//   heroBgEl.style.transform = '';
+// });
 
 // Scroll fade out effect
 window.addEventListener('scroll', () => {
@@ -1355,14 +1356,16 @@ window.addEventListener('scroll', () => {
 
   const heroRect = heroSection.getBoundingClientRect();
   const heroHeight = heroRect.height;
-  const scrollProgress = Math.max(0, Math.min(1, (window.innerHeight - heroRect.top) / (window.innerHeight + heroHeight * 0.3)));
 
-  // Fade out content
+  // Extended fade range - starts fading earlier and continues longer
+  const scrollProgress = Math.max(0, Math.min(1, (window.innerHeight * 0.8 - heroRect.top) / (window.innerHeight * 1.2)));
+
+  // Fade out content - smooth and continuous
   desktopContent.style.opacity = Math.max(0, 1 - scrollProgress);
-  desktopContent.style.transform = `translateY(${scrollProgress * 40}px)`;
+  desktopContent.style.transform = `translateY(${scrollProgress * 50}px)`;
 
-  // Fade out background
-  heroBgEl.style.opacity = Math.max(0, 1 - scrollProgress * 0.8);
+  // Fade out background - slightly delayed fade
+  heroBgEl.style.opacity = Math.max(0, 1 - Math.max(0, scrollProgress - 0.1) * 1.1);
 }, { passive: true });
 
 </script>

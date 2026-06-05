@@ -326,7 +326,7 @@ body { padding-left: 48px; }
   color: var(--text-mid);
   text-align: center;
   letter-spacing: 0;
-  word-break: break-word;
+  white-space: nowrap;
   max-width: 72px;
   line-height: 1.4;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
@@ -335,7 +335,12 @@ body { padding-left: 48px; }
   padding: 6px 10px;
   border-radius: 6px;
   overflow: hidden;
-  max-height: 34px;
+  text-overflow: ellipsis;
+  transition: color 0.3s ease;
+}
+
+.desktop-icon:hover .icon-label {
+  color: var(--pink);
 }
 
 .scroll-cue {

@@ -251,27 +251,35 @@ body { padding-left: 48px; }
 }
 
 .desktop-icons {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 40px 80px;
-  justify-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 60px;
+  justify-content: center;
   align-items: center;
-  max-width: 500px;
+  flex-wrap: wrap;
+  max-width: 1000px;
   margin: 40px auto 0;
 }
 
+.desktop-icons .desktop-icon:nth-child(odd) {
+  transform: translateY(25px);
+}
+
 .desktop-icons .desktop-icon:nth-child(even) {
-  transform: translateY(80px);
+  transform: translateY(-25px);
 }
 
 @media(max-width: 768px) {
   .desktop-icons {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px 60px;
+    gap: 40px;
+  }
+
+  .desktop-icons .desktop-icon:nth-child(odd) {
+    transform: translateY(15px);
   }
 
   .desktop-icons .desktop-icon:nth-child(even) {
-    transform: translateY(60px);
+    transform: translateY(-15px);
   }
 }
 

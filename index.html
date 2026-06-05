@@ -258,7 +258,7 @@ body { padding-left: 48px; }
   align-items: center;
   flex-wrap: wrap;
   max-width: 1000px;
-  margin: 120px auto 0;
+  margin: 180px auto 0;
   transition: opacity 0.3s ease;
 }
 
@@ -302,11 +302,22 @@ body { padding-left: 48px; }
 }
 .desktop-icon:hover {
   background: transparent;
-  transform: translateY(-10px);
-  filter: drop-shadow(0 12px 32px rgba(255,20,147, 0.35));
+  transform: translateY(-20px) scale(1.15);
+  filter: drop-shadow(0 16px 40px rgba(255, 20, 147, 0.5));
 }
-.icon-img { height: clamp(42px, 8.4vw, 84px); width: auto; object-fit: contain; filter: grayscale(100%); transition: filter 0.3s ease; }
-.desktop-icon:hover .icon-img { filter: grayscale(0%) brightness(1.15); }
+
+.icon-img {
+  height: clamp(42px, 8.4vw, 84px);
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.desktop-icon:hover .icon-img {
+  filter: grayscale(0%) brightness(1.25) drop-shadow(0 0 12px rgba(255, 20, 147, 0.6));
+  transform: scale(1.1);
+}
 .icon-label {
   font-family: 'DosHandwriting', sans-serif;
   font-size: 11px;
@@ -1340,9 +1351,10 @@ heroSection.addEventListener('mouseleave', () => {
 // Scroll fade out effect
 window.addEventListener('scroll', () => {
   const heroRect = heroSection.getBoundingClientRect();
-  const scrollProgress = Math.max(0, 1 - heroRect.bottom / window.innerHeight);
-  desktopContent.style.opacity = Math.max(0, 1 - scrollProgress * 1.5);
-});
+  const scrollProgress = Math.max(0, Math.min(1, (window.innerHeight - heroRect.top) / window.innerHeight));
+  desktopContent.style.opacity = 1 - scrollProgress;
+  desktopContent.style.transform = `translateY(${scrollProgress * 30}px)`;
+}, { passive: true });
 
 </script>
 </body>

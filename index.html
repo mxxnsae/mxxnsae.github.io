@@ -204,7 +204,7 @@ body { padding-left: 48px; }
   inset: -8%;
   background: url('hero/hero.png') center/cover no-repeat;
   z-index: 0;
-  transition: transform 0.25s ease-out;
+  transition: transform 0.25s ease-out, opacity 0.4s ease;
 }
 
 @keyframes gradShift {
@@ -229,6 +229,7 @@ body { padding-left: 48px; }
   flex-direction: column;
   align-items: center;
   gap: 40px;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .nameplate-title {
@@ -1350,10 +1351,18 @@ heroSection.addEventListener('mouseleave', () => {
 
 // Scroll fade out effect
 window.addEventListener('scroll', () => {
+  if (!desktopContent) return;
+
   const heroRect = heroSection.getBoundingClientRect();
-  const scrollProgress = Math.max(0, Math.min(1, (window.innerHeight - heroRect.top) / window.innerHeight));
-  desktopContent.style.opacity = 1 - scrollProgress;
-  desktopContent.style.transform = `translateY(${scrollProgress * 30}px)`;
+  const heroHeight = heroRect.height;
+  const scrollProgress = Math.max(0, Math.min(1, (window.innerHeight - heroRect.top) / (window.innerHeight + heroHeight * 0.3)));
+
+  // Fade out content
+  desktopContent.style.opacity = Math.max(0, 1 - scrollProgress);
+  desktopContent.style.transform = `translateY(${scrollProgress * 40}px)`;
+
+  // Fade out background
+  heroBgEl.style.opacity = Math.max(0, 1 - scrollProgress * 0.8);
 }, { passive: true });
 
 </script>

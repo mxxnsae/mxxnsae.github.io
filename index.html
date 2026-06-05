@@ -202,14 +202,7 @@ body { padding-left: 48px; }
 .hero-bg {
   position: absolute;
   inset: -8%;
-  background:
-    radial-gradient(ellipse 60% 50% at 15% 30%, rgba(255, 154, 199, 0.82) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 60% at 80% 20%, rgba(182, 215, 255, 0.72) 0%, transparent 55%),
-    radial-gradient(ellipse 55% 45% at 60% 75%, rgba(194, 212, 200, 0.68) 0%, transparent 55%),
-    radial-gradient(ellipse 40% 50% at 30% 80%, rgba(201, 177, 223, 0.68) 0%, transparent 50%),
-    radial-gradient(ellipse 45% 40% at 85% 65%, rgba(245, 255, 206, 0.62) 0%, transparent 50%),
-    #fff4fd;
-  animation: gradShift s ease-in-out infinite alternate;
+  background: url('hero/hero.png') center/cover no-repeat;
   z-index: 0;
   transition: transform 0.25s ease-out;
 }
@@ -258,12 +251,28 @@ body { padding-left: 48px; }
 }
 
 .desktop-icons {
-  display: flex;
-  gap: clamp(12px, 2vw, 36px);
-  flex-wrap: nowrap;
-  justify-content: center;
-  max-width: 90vw;
-  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px 80px;
+  justify-items: center;
+  align-items: center;
+  max-width: 500px;
+  margin: 40px auto 0;
+}
+
+.desktop-icons .desktop-icon:nth-child(even) {
+  transform: translateY(80px);
+}
+
+@media(max-width: 768px) {
+  .desktop-icons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px 60px;
+  }
+
+  .desktop-icons .desktop-icon:nth-child(even) {
+    transform: translateY(60px);
+  }
 }
 
 .desktop-icon {
@@ -844,19 +853,19 @@ footer a:hover { color: var(--pink); }
     </div>
     <div class="desktop-icons">
       <div class="desktop-icon" onclick="goToSection('artwork-main')">
-        <img src="images/icon_1.png" alt="Artwork" class="icon-img">
+        <img src="hero/icon_1.png" alt="Artwork" class="icon-img">
         <div class="icon-label">Artwork</div>
       </div>
       <div class="desktop-icon" onclick="openModal('cv-modal')">
-        <img src="images/icon_2.png" alt="CV.txt" class="icon-img">
+        <img src="hero/icon_2.png" alt="CV.txt" class="icon-img">
         <div class="icon-label">CV.txt</div>
       </div>
       <div class="desktop-icon" onclick="openModal('contact-modal')">
-        <img src="images/icon_3.png" alt="Contact.exe" class="icon-img">
+        <img src="hero/icon_3.png" alt="Contact.exe" class="icon-img">
         <div class="icon-label">Contact.exe</div>
       </div>
       <div class="desktop-icon" onclick="window.open('https://mxxnsae.github.io/MascotOracle/','_blank')">
-        <img src="images/icon_4.png" alt="???" class="icon-img">
+        <img src="hero/icon_4.png" alt="???" class="icon-img">
         <div class="icon-label">???</div>
       </div>
     </div>

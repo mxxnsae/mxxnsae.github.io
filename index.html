@@ -1063,8 +1063,9 @@ footer a:hover { color: var(--pink); }
         <p style="margin: 0;">Key themes: algorithmic hallucination, boundary design as political choice, user bodily alignment, surveillance technology and séance practice as structurally parallel systems.</p>
       </div>
 
-      <div style="display: flex; gap: 12px;">
-        <a href="research/인공지능_시스템의_경계_설계와_사용자_수용성_안면_인식_필터_Ectoplasm_사례_분석.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 10px 16px; background: var(--pink); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600; transition: opacity 0.2s;">▶ READ PAPER (Korean / PDF)</a>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="research/인공지능_시스템의_경계_설계와_사용자_수용성_안면_인식_필터_Ectoplasm_사례_분석.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 10px 16px; background: var(--pink); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600; transition: opacity 0.2s;">▶ PAPER (Korean)</a>
+        <a href="research/장채린 - 인공지능 시스템의 경계 설계와 사용자 수용성 안면 인식 필터 Ectoplasm 사례 분석_en.pdf" target="_blank" rel="noopener" style="display: inline-block; padding: 10px 16px; background: var(--cyan); color: var(--text); text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: 600; transition: opacity 0.2s;">▶ PAPER (English)</a>
       </div>
     </div>
   </div>
@@ -1116,8 +1117,8 @@ footer a:hover { color: var(--pink); }
       </div>
       <div class="cv-section">
         <h3 class="lang-en">Academic Research</h3><h3 class="lang-ko">학술 활동</h3>
-        <div class="cv-entry lang-en"><strong>AI Systems and User Perception: A Case Study of &lt;Ectoplasm&gt;</strong>Submitted to Korean Digital Content Society Summer Conference 2026. Media-philosophical analysis of algorithmic hallucination, boundary design, and user complicity. <span>2026</span></div>
-        <div class="cv-entry lang-ko"><strong>AI 시스템과 사용자 경험: 안면 인식 필터 &lt;Ectoplasm&gt; 사례 분석</strong>한국 디지털 콘텐츠 학회 2026 하계 컨퍼런스 투고. 알고리즘 환각, 경계 설계, 사용자 착각의 메커니즘에 관한 매체철학적 분석. <span>2026</span></div>
+        <div class="cv-entry lang-en"><strong>AI Systems and the Politics of Boundary Design: A Case Study of &lt;Ectoplasm&gt;</strong>Submitted to Korean Digital Content Society Summer Conference 2026. Media-philosophical analysis of algorithmic hallucination, boundary design, and user complicity. Available in Korean and English. <span>2026</span></div>
+        <div class="cv-entry lang-ko"><strong>인공지능 시스템의 경계 설계와 사용자 수용성: 안면 인식 필터 &lt;Ectoplasm&gt; 사례 분석</strong>한국 디지털 콘텐츠 학회 2026 하계 컨퍼런스 투고. 알고리즘 환각, 경계 설계, 사용자 착각의 메커니즘에 관한 매체철학적 분석. 한국어 및 영문 제공. <span>2026</span></div>
       </div>
       <div class="cv-section">
         <h3 class="lang-en">Awards & Exhibitions</h3><h3 class="lang-ko">수상 및 전시</h3>
@@ -1293,7 +1294,10 @@ function openWorkDetail(work) {
   const linkEls = [];
   if (work.url) linkEls.push(`<a class="artwork-link" href="${work.url}" target="_blank" rel="noopener">▶ VIEW WORK</a>`);
   if (work.links) work.links.forEach(l => linkEls.push(`<a class="artwork-link" href="${l.url}" target="_blank" rel="noopener">▶ ${l.label}</a>`));
-  if (work.id === 'ecto') linkEls.push(`<a class="artwork-link" href="research/인공지능_시스템의_경계_설계와_사용자_수용성_안면_인식_필터_Ectoplasm_사례_분석.pdf" target="_blank" rel="noopener" style="background: linear-gradient(135deg, var(--pink), var(--purple));">▶ ACADEMIC ANALYSIS</a>`);
+  if (work.id === 'ecto') {
+    linkEls.push(`<a class="artwork-link" href="research/인공지능_시스템의_경계_설계와_사용자_수용성_안면_인식_필터_Ectoplasm_사례_분석.pdf" target="_blank" rel="noopener" style="background: linear-gradient(135deg, var(--pink), var(--purple));">▶ PAPER (Korean)</a>`);
+    linkEls.push(`<a class="artwork-link" href="research/장채린 - 인공지능 시스템의 경계 설계와 사용자 수용성 안면 인식 필터 Ectoplasm 사례 분석_en.pdf" target="_blank" rel="noopener" style="background: linear-gradient(135deg, var(--cyan), var(--purple));">▶ PAPER (English)</a>`);
+  }
   document.getElementById('wd-link').innerHTML = linkEls.join(' ');
   let videoHTML = '';
   if (work.video) {

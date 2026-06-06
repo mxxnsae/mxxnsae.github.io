@@ -1289,6 +1289,15 @@ function openWorkDetail(work) {
     imgContainer.appendChild(wrap);
   });
 
+  // Add click handlers to detail images
+  imgContainer.querySelectorAll('img').forEach(img => {
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openImageZoom(e.target.src);
+    });
+  });
+
   openModal('work-detail-modal');
 }
 
@@ -1344,21 +1353,11 @@ function openImageZoom(src) {
 
 function closeZoomModal(e) {
   // Allow closing by clicking backdrop or close button
-  if(e && e.target.id !== 'image-zoom-modal') return;
+  if(e && e.target.id !== 'image-zoom-modal' && !e.target.classList.contains('zoom-close')) return;
   const modal = document.getElementById('image-zoom-modal');
   modal.classList.remove('active');
   document.body.style.overflow = '';
 }
-
-// Add click handlers to all work detail images
-setTimeout(() => {
-  document.querySelectorAll('.work-detail-images img').forEach(img => {
-    img.style.cursor = 'zoom-in';
-    img.addEventListener('click', (e) => {
-      openImageZoom(e.target.src);
-    });
-  });
-}, 100);
 
 document.addEventListener('keydown', e => {
   if(e.key==='Escape') ['cv-modal','contact-modal','other-modal','work-detail-modal'].forEach(closeModal);

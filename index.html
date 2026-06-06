@@ -785,6 +785,50 @@ footer a:hover { color: var(--pink); }
 ::-webkit-scrollbar-track { background: #f5f5f5; }
 ::-webkit-scrollbar-thumb { background: rgba(255,20,147,0.3); }
 
+/* ── Image Zoom Modal ── */
+#image-zoom-modal {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+#image-zoom-modal.active {
+  display: flex;
+}
+#image-zoom-modal .zoom-image {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  animation: zoomIn 0.3s ease-out;
+}
+#image-zoom-modal .zoom-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+#image-zoom-modal .zoom-close:hover {
+  background: rgba(255,255,255,0.3);
+  border-color: rgba(255,255,255,0.5);
+}
+@keyframes zoomIn { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
+.work-detail-images img { cursor: zoom-in; transition: filter 0.2s; }
+.work-detail-images img:hover { filter: brightness(1.05); }
+
 /* ── CS Highlight ── */
 .cs-highlight {
   background: linear-gradient(90deg, #FF1493 0%, #FF69B4 50%, #39FF14 100%);
@@ -866,7 +910,7 @@ footer a:hover { color: var(--pink); }
   .nameplate-title {
     font-size: clamp(40px, 12vw, 70px);
     letter-spacing: 2px;
-    text-shadow: 0 0 20px rgba(255, 20, 147, 1), 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 105, 180, 0.8);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 255, 255, 0.8);
     filter: none;
     font-weight: 900;
   }
@@ -1126,6 +1170,12 @@ footer a:hover { color: var(--pink); }
   </div>
 </div>
 
+<!-- Image Zoom Modal -->
+<div id="image-zoom-modal" onclick="closeZoomModal(event)">
+  <img id="zoom-image" class="zoom-image" alt="">
+  <button class="zoom-close" onclick="closeZoomModal()">×</button>
+</div>
+
 <script>
 const mainWorks = [
   { id:'ecto', idx:'01', title:'Ectoplasm', subtitle:'엑토플라즘', year:'2026', medium:'Real-time Cam Filter, Computer Vision', tags:['TouchDesigner','Occult','Speculative Design'], color:'linear-gradient(135deg,#1a0018,#0d0010,#00101a)', img:'images/thumb_ecto.gif', images:['images/detail_ecto_1.png'], desc:'Ectoplasm is a real-time face-detection filter that hallucinates. The computer vision system doesn\'t reliably recognize faces—instead, it sees presence where none exists, conjures faces from nothing. This is visualized as a viscous liquid dripping across the screen, carving out zones where the algorithm is "permitted" to search for human traces. The system fails at its most basic function: it sees what isn\'t there. This echoes 19th-century spiritualism. Séances promised to make the invisible visible, to conjure presence from formlessness. They failed at what they claimed to do, yet people believed them. Computer vision does the same—it hallucinates, it conjures, it fails to see truly. Yet we trust it. We look at the screen and accept its false visions as real. The surveillance system and the séance are structurally identical: both promise to reveal what\'s hidden, both manufacture presence, both ask us to believe in their impossible sight. This is where surveillance technology and the occult converge: in our willingness to accept the system\'s false visions as truth.', url:null },
@@ -1282,6 +1332,33 @@ function renderOther() {
 function openModal(id) { document.getElementById(id).classList.add('active'); document.body.style.overflow='hidden'; }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow=''; }
 function handleOverlayClick(e, id) { if(e.target===document.getElementById(id)) closeModal(id); }
+
+// Image zoom modal
+function openImageZoom(src) {
+  const modal = document.getElementById('image-zoom-modal');
+  const img = document.getElementById('zoom-image');
+  img.src = src;
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeZoomModal(e) {
+  // Allow closing by clicking backdrop or close button
+  if(e && e.target.id !== 'image-zoom-modal') return;
+  const modal = document.getElementById('image-zoom-modal');
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Add click handlers to all work detail images
+setTimeout(() => {
+  document.querySelectorAll('.work-detail-images img').forEach(img => {
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', (e) => {
+      openImageZoom(e.target.src);
+    });
+  });
+}, 100);
 
 document.addEventListener('keydown', e => {
   if(e.key==='Escape') ['cv-modal','contact-modal','other-modal','work-detail-modal'].forEach(closeModal);

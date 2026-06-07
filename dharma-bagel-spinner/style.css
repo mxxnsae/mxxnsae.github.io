@@ -24,6 +24,19 @@ canvas {
   display: block;
 }
 
+.tagline {
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  color: #5c4033;
+  font-weight: 300;
+  letter-spacing: 2px;
+  z-index: 10;
+  text-align: center;
+}
+
 .ui {
   position: fixed;
   bottom: 40px;

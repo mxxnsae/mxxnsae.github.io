@@ -4,8 +4,8 @@ const bagels = [
   { name: 'Cream Cheese', color: 0xFFFAFA, roughness: 0.3, metalness: 0.15 },
   { name: 'Smoked Salmon', color: 0xCD853F, roughness: 0.6, metalness: 0.05 },
   { name: 'Blueberry', color: 0xC9B8A8, roughness: 0.7, metalness: 0.0 },
-  { name: 'Everything', color: 0x1a1a1a, roughness: 0.5, metalness: 0.1 },
   { name: 'Sesame', color: 0xF4A460, roughness: 0.8, metalness: 0.0 },
+  { name: 'Everything', color: 0x1a1a1a, roughness: 0.5, metalness: 0.1 },
   { name: 'UFO', color: 0x00E5CC, roughness: 0.3, metalness: 0.8 },
 ];
 

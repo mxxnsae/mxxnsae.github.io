@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MASCOT ORACLE v0.00β // 마스코트 신탁</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
+
+  :root {
+    --pink: #FF1493;
+    --cyan: #00FFFF;
+    --purple: #D8BFD8;
+    --dark: #05050f;
+    --darker: #020208;
+    --mid: #0d0d1a;
+    --pink-dim: #5f0644;
+    --cyan-dim: #279a9a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: linear-gradient(135deg, #FF1493 0%, #7B2FFF 35%, #0055FF 65%, #00CC44 100%);
+    background-attachment: fixed;
+    color: var(--cyan);
+    font-family: 'Gothic A1', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    overflow-x: hidden;
+    position: relative;
+    transition: background 0.05s;
+  }
+
+  body.dark-flash {
+    background: #000 !important;
+  }
+
+  /* CRT scanlines */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Vignette */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.3) 100%);
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  /* ── WINDOW ── */
+  .window {
+    background-color: rgba(5,3,18,0.28);
+    backdrop-filter: blur(8px) saturate(1.8) brightness(1.1);
+    -webkit-backdrop-filter: blur(20px) saturate(1.8) brightness(1.1);
+    border: 1px solid rgba(255,20,147,0.35);
+    border-radius: 16px;
+    box-shadow:
+      0 0 0 0.5px rgba(255,255,255,0.08) inset,
+      0 0 12px rgba(255,20,147,0.3),
+      0 0 50px rgba(255,20,147,0.1),
+      0 30px 60px rgba(0,0,0,0.35);
+    width: 100%;
+    max-width: 680px;
+    margin-bottom: 20px;
+    animation: borderFlicker 8s infinite;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Dark + noise overlay on top of mascot image */
+  .window::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 2, 8, 0.1);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Ensure all window content sits above the overlay */
+  .titlebar, .window-body, .statusbar { position: relative; z-index: 1; }
+
+  @keyframes borderFlicker {
+    0%,94%,100% { box-shadow: 0 0 10px var(--pink), 0 0 40px rgba(255,20,147,0.2); }
+    96% { box-shadow: 0 0 3px var(--pink), 0 0 8px rgba(255,20,147,0.1); }
+    97% { box-shadow: 0 0 18px var(--pink), 0 0 60px rgba(255,20,147,0.5); }
+  }
+
+  .titlebar {
+    background: linear-gradient(90deg, var(--pink-dim), #1a001a);
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--pink);
+  }
+
+  .titlebar-title {
+    font-family: 'Galmuri11', monospace;
+    font-size: 8px;
+    color: var(--pink);
+    text-shadow: 0 0 8px var(--pink);
+    letter-spacing: 1px;
+  }
+
+  .titlebar-btns { display: flex; gap: 5px; }
+  .titlebar-btns span {
+    width: 12px; height: 12px;
+    border: 1px solid var(--pink-dim);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 8px; color: var(--pink); cursor: default;
+  }
+
+  .window-body { padding: 24px; }
+
+  /* ── MASCOT ── */
+  .mascot-wrap { text-align: center; padding: 20px 0 10px; }
+
+  .mascot {
+    font-size: 52px;
+    display: inline-block;
+    animation: mascotFloat 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 12px var(--cyan));
+    cursor: pointer;
+    user-select: none;
+  }
+  .mascot:hover { animation: mascotSpin 0.4s ease-in-out; filter: drop-shadow(0 0 20px var(--pink)); }
+
+  @keyframes mascotFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  @keyframes mascotSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.3); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+
+  .mascot-speech { font-size: 11px; color: var(--purple); margin-top: 8px; min-height: 16px; letter-spacing: 0.5px; }
+
+  /* ── HEADER ── */
+  .oracle-title {
+    font-family: 'Orbit', sans-serif;
+    font-size: 11px;
+    color: var(--pink);
+    text-align: center;
+    text-shadow: 0 0 10px var(--pink), 2px 2px 0 var(--cyan-dim);
+    letter-spacing: 2px;
+    margin: 16px 0 4px;
+    line-height: 1.8;
+  }
+
+  .oracle-subtitle { font-size: 11px; color: var(--cyan-dim); text-align: center; letter-spacing: 3px; margin-bottom: 20px; }
+  .divider { border: none; border-top: 1px solid var(--pink-dim); margin: 16px 0; opacity: 0.5; }
+
+  /* ── FORM ── */
+  .form-row { display: flex; flex-direction: column; margin-bottom: 16px; }
+  .form-row label { font-size: 10px; color: var(--pink); letter-spacing: 2px; margin-bottom: 6px; text-transform: uppercase; }
+  .form-row label span { color: var(--cyan-dim); font-size: 9px; margin-left: 6px; letter-spacing: 0; }
+  .form-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .form-cols-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; align-items: center; }
+
+  input[type="number"], select {
+    background: var(--mid); border: 1px solid var(--cyan-dim);
+    color: var(--cyan); font-family: 'Gothic A1', sans-serif;
+    font-size: 14px; padding: 8px 10px; width: 100%; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -moz-appearance: textfield; appearance: textfield;
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+  input[type="number"]:focus, select:focus { border-color: var(--pink); box-shadow: 0 0 8px rgba(255,20,147,0.4); }
+  select { cursor: pointer; }
+  select option { background: var(--darker); }
+
+  .checkbox-row { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .checkbox-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--pink); cursor: pointer; }
+  .checkbox-row span { font-size: 10px; color: var(--purple); letter-spacing: 1px; }
+
+  .btn-oracle {
+    width: 100%; padding: 14px;
+    background: transparent; border: 2px solid var(--pink);
+    color: var(--pink); font-family: 'Galmuri11', monospace;
+    font-size: 10px; letter-spacing: 3px; cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 0 0 8px rgba(255,20,147,0.3);
+    margin-top: 8px;
+    animation: btnPulse 3s ease-in-out infinite;
+    transition: all 0.15s;
+  }
+  @keyframes btnPulse { 0%,100% { box-shadow: 0 0 8px rgba(255,20,147,0.3); } 50% { box-shadow: 0 0 18px rgba(255,20,147,0.6); } }
+  .btn-oracle:hover { background: var(--pink); color: var(--darker); box-shadow: 0 0 24px var(--pink); animation: none; }
+  .btn-oracle:active { transform: scale(0.98); }
+
+  /* ── LOADING ── */
+  #loading { display: none; padding: 20px 0; }
+  .loading-log { font-size: 10px; color: var(--cyan); line-height: 2; min-height: 140px; }
+  .loading-log .log-line { opacity: 0; animation: fadeIn 0.2s forwards; }
+  @keyframes fadeIn { to { opacity: 1; } }
+  .loading-bar-wrap { margin-top: 12px; border: 1px solid var(--cyan-dim); height: 14px; background: var(--mid); position: relative; overflow: hidden; }
+  .loading-bar { height: 100%; background: linear-gradient(90deg, var(--pink), var(--cyan)); width: 0%; transition: width 0.1s linear; box-shadow: 0 0 8px var(--pink); }
+
+  /* ── OUTPUT ── */
+  #output { display: none; }
+
+  .pillars-wrap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 20px; }
+  .pillar { border: 1px solid var(--cyan-dim); padding: 8px 4px; text-align: center; }
+  .pillar-label { font-size: 8px; color: var(--cyan-dim); letter-spacing: 1px; margin-bottom: 6px; }
+  .pillar-char { font-size: 22px; color: var(--cyan); text-shadow: 0 0 8px var(--cyan); display: block; line-height: 1.4; }
+  .pillar-char-sub { font-size: 11px; color: var(--pink); display: block; }
+  .pillar-meaning { font-size: 8px; color: var(--purple); margin-top: 4px; letter-spacing: 0.5px; }
+
+  /* Unknown pillar glitch style */
+  .pillar-unknown .pillar-char { color: var(--pink); text-shadow: 0 0 8px var(--pink); animation: glitchPulse 0.8s infinite; }
+  .pillar-unknown .pillar-char-sub { color: var(--pink); animation: glitchPulse 0.8s 0.1s infinite; }
+  .pillar-unknown .pillar-meaning { color: var(--pink); }
+  @keyframes glitchPulse { 0%,100% { opacity: 1; transform: none; } 50% { opacity: 0.4; transform: translateX(2px); } }
+
+  .fortune-section { margin-bottom: 20px; }
+  .fortune-header { font-family: 'Galmuri11', monospace; font-size: 8px; color: var(--pink); letter-spacing: 2px; margin-bottom: 10px; text-shadow: 0 0 6px var(--pink); }
+  .fortune-text { font-size: 13px; line-height: 1.9; color: var(--purple); letter-spacing: 0.5px; }
+  .fortune-text-en { font-size: 11px; line-height: 1.8; color: var(--cyan-dim); letter-spacing: 0.5px; border-left: 2px solid var(--cyan-dim); padding-left: 12px; margin-top: 10px; font-style: italic; }
+
+  .warning-box {
+    border: 1px solid var(--pink); padding: 10px 12px; margin: 12px 0;
+    background: rgba(255,20,147,0.05); font-size: 10px; color: var(--pink);
+    letter-spacing: 1px; line-height: 1.8;
+    animation: warnFlicker 4s infinite;
+  }
+  @keyframes warnFlicker { 0%,90%,100% { opacity:1; } 92% { opacity:0.4; } 94% { opacity:1; } 96% { opacity:0.3; } }
+
+  /* ── TALISMAN ── */
+  .talisman-wrap { display: flex; flex-direction: column; align-items: center; margin: 20px 0; }
+  .talisman-label { font-family: 'Galmuri11', monospace; font-size: 8px; color: var(--pink); letter-spacing: 2px; margin-bottom: 12px; text-shadow: 0 0 6px var(--pink); }
+  #talismanCanvas { border: 3px solid var(--darker); box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+  .talisman-code { font-size: 9px; color: var(--cyan-dim); margin-top: 8px; letter-spacing: 2px; }
+  .talisman-card-title {
+    font-family: 'Galmuri11', monospace;
+    font-size: 9px;
+    color: var(--purple);
+    letter-spacing: 3px;
+    margin-top: 10px;
+    text-transform: uppercase;
+    text-align: center;
+    border: 1px solid var(--purple);
+    padding: 6px 14px;
+    opacity: 0.8;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-offering {
+    width: 100%; padding: 12px;
+    background: transparent; border: 2px solid #FFD700;
+    color: #FFD700; font-family: 'Galmuri11', monospace;
+    font-size: 9px; letter-spacing: 2px; cursor: pointer;
+    margin-top: 8px; transition: all 0.15s;
+    text-shadow: 0 0 6px #FFD700;
+    animation: goldPulse 2s ease-in-out infinite;
+  }
+  @keyframes goldPulse { 0%,100% { box-shadow: 0 0 6px rgba(255,215,0,0.3); } 50% { box-shadow: 0 0 16px rgba(255,215,0,0.7); } }
+  .btn-offering:hover { background: #FFD700; color: var(--darker); }
+
+  .btn-reset {
+    width: 100%; padding: 10px;
+    background: transparent; border: 1px solid var(--cyan-dim);
+    color: var(--cyan-dim); font-family: 'Gothic A1', sans-serif;
+    font-size: 11px; letter-spacing: 2px; cursor: pointer;
+    margin-top: 8px; transition: all 0.15s;
+  }
+  .btn-reset:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  /* Offering message */
+  #offeringMsg {
+    display: none;
+    text-align: center;
+    font-family: 'Galmuri11', monospace;
+    font-size: 10px;
+    color: #FFD700;
+    letter-spacing: 2px;
+    padding: 14px;
+    margin-top: 8px;
+    border: 1px solid #FFD700;
+    background: rgba(255,215,0,0.05);
+    line-height: 2;
+    text-shadow: 0 0 8px #FFD700;
+    animation: warnFlicker 3s infinite;
+  }
+
+  /* ── COINS ── */
+  .coin {
+    position: fixed;
+    font-size: 24px;
+    pointer-events: none;
+    z-index: 10000;
+    animation: coinFall linear forwards;
+  }
+  @keyframes coinFall {
+    0% { transform: translateY(-40px) rotate(0deg); opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ── STATUSBAR ── */
+  .statusbar {
+    background: #ff1493; border-top: 1px solid var(--pink-dim);
+    padding: 4px 10px; font-size: 9px; color: var(--pink-dim);
+    display: flex; justify-content: space-between; letter-spacing: 1px;
+  }
+
+  /* ── ERROR POPUP ── */
+  .error-popup {
+    display: none; position: fixed;
+    top: 40px; left: 50%; transform: translateX(-50%);
+    background: var(--darker); border: 2px solid var(--pink);
+    box-shadow: 0 0 20px var(--pink); z-index: 10000;
+    font-size: 10px; min-width: 280px;
+  }
+  .error-popup .titlebar { background: var(--pink); }
+  .error-popup .titlebar .titlebar-title { color: var(--darker); }
+  .error-popup-body { padding: 16px; line-height: 2; color: var(--purple); }
+
+  /* ── BUG POPUPS (loading) ── */
+  .bug-popup {
+    position: fixed;
+    background: var(--darker);
+    border: 2px solid var(--pink);
+    box-shadow: 0 0 12px var(--pink);
+    z-index: 9990;
+    font-size: 9px;
+    min-width: 200px;
+    max-width: 260px;
+    pointer-events: none;
+    animation: bugAppear 0.1s forwards;
+  }
+  @keyframes bugAppear { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+  .bug-popup .titlebar { background: linear-gradient(90deg, #660033, #1a001a); }
+  .bug-popup-body { padding: 10px 12px; color: var(--purple); line-height: 1.8; font-family: 'Gothic A1', sans-serif; }
+
+  .footnote { font-size: 10px; color: #cdff82; text-align: center; margin-top: 50px; letter-spacing: 1px; }
+
+  /* ── MUTE BUTTON ── */
+  #muteBtn {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 9990;
+    background: var(--darker);
+    border: 1px solid var(--pink-dim);
+    color: var(--pink);
+    font-family: 'Gothic A1', sans-serif;
+    font-size: 11px;
+    padding: 6px 12px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+  }
+  #muteBtn:hover { border-color: var(--pink); box-shadow: 0 0 8px var(--pink); }
+
+  /* ── FLYING LINK STICKER ── */
+  #linkSticker {
+    position: fixed;
+    width: 56px;
+    z-index: 9100;
+    cursor: pointer;
+    animation: flyAround 18s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 8px rgba(0,255,255,0.6));
+    transition: filter 0.2s, transform 0.2s;
+  }
+  #linkSticker:hover {
+    filter: drop-shadow(0 0 18px var(--pink)) drop-shadow(0 0 30px var(--cyan));
+    transform: scale(1.15);
+    animation-play-state: paused;
+  }
+  @keyframes flyAround {
+    0%   { top: 12vh;  left: 10vw;  transform: rotate(-8deg); }
+    15%  { top: 60vh;  left: 75vw;  transform: rotate(12deg); }
+    30%  { top: 20vh;  left: 55vw;  transform: rotate(-5deg); }
+    45%  { top: 75vh;  left: 20vw;  transform: rotate(15deg); }
+    60%  { top: 40vh;  left: 85vw;  transform: rotate(-10deg); }
+    75%  { top: 80vh;  left: 50vw;  transform: rotate(8deg); }
+    90%  { top: 25vh;  left: 30vw;  transform: rotate(-14deg); }
+    100% { top: 55vh;  left: 8vw;   transform: rotate(10deg); }
+  }
+
+  /* ── STICKERS ── */
+  .sticker {
+    position: fixed;
+    width: 135px;
+    cursor: grab;
+    user-select: none;
+    z-index: 9000;
+    filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.4));
+    transition: filter 0.15s, transform 0.1s;
+  }
+  .sticker:hover { filter: drop-shadow(2px 4px 16px rgba(255,20,147,0.6)); }
+  .sticker.dragging { cursor: grabbing; transform: scale(1.08) rotate(3deg); filter: drop-shadow(0 8px 20px rgba(255,20,147,0.8)); z-index: 9500; }
+
+  /* ── CLOSE ERROR POPUP ── */
+  #closeErrorPopup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--darker);
+    border: 2px solid var(--pink);
+    box-shadow: 0 0 30px var(--pink), 0 0 60px rgba(255,20,147,0.3);
+    z-index: 10001;
+    min-width: 320px;
+    animation: borderFlicker 2s infinite;
+  }
+  #closeErrorPopup .titlebar { background: var(--pink); }
+  #closeErrorPopup .titlebar .titlebar-title { color: var(--darker); font-size: 9px; }
+  .close-error-body {
+    padding: 20px;
+    font-family: 'Gothic A1', sans-serif;
+    font-size: 12px;
+    color: var(--purple);
+    line-height: 2;
+    text-align: center;
+  }
+  .close-error-body strong { color: var(--pink); display: block; margin-bottom: 8px; font-size: 14px; }
+  .close-error-btns { display: flex; gap: 8px; margin-top: 14px; }
+  .close-error-btns button {
+    flex: 1; padding: 8px;
+    background: transparent; border: 1px solid var(--pink-dim);
+    color: var(--pink); font-family: 'Gothic A1', sans-serif;
+    font-size: 11px; cursor: pointer; letter-spacing: 1px;
+    transition: all 0.15s;
+  }
+  .close-error-btns button:hover { background: var(--pink); color: var(--darker); }
+
+  /* ── PILLAR ERROR STATE ── */
+  .pillar { cursor: pointer; transition: border-color 0.2s; }
+  .pillar:hover { border-color: var(--pink); }
+  .pillar-corrupted {
+    border-color: var(--pink) !important;
+    background: rgba(255,20,147,0.08);
+    animation: pillarShake 0.3s ease-out, pillarGlow 1.5s ease-out forwards;
+  }
+  @keyframes pillarShake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-4px); }
+    40% { transform: translateX(4px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
+  }
+  @keyframes pillarGlow {
+    0% { box-shadow: 0 0 12px var(--pink); }
+    100% { box-shadow: none; }
+  }
+  .pillar-corrupted .pillar-char { color: var(--pink) !important; text-shadow: 0 0 8px var(--pink); animation: glitchPulse 0.4s infinite; }
+  .pillar-corrupted .pillar-char-sub { color: var(--pink) !important; }
+  .pillar-corrupted .pillar-meaning { color: var(--pink) !important; }
+
+  /* ── FULL ERROR OVERLAY ── */
+  #errorOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 99999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: overlayFlicker 0.1s steps(1) 3;
+  }
+  #errorOverlay.active { display: flex; }
+  @keyframes overlayFlicker { 0%,100% { background: #000; } 50% { background: #1a0000; } }
+  .error-overlay-title {
+    font-family: 'Galmuri11', monospace;
+    font-size: clamp(14px, 4vw, 28px);
+    color: var(--pink);
+    text-shadow: 0 0 20px var(--pink), 0 0 60px var(--pink);
+    text-align: center;
+    line-height: 2;
+    letter-spacing: 4px;
+    padding: 20px;
+    animation: overlayTextFlicker 0.8s infinite;
+  }
+  @keyframes overlayTextFlicker {
+    0%,90%,100% { opacity: 1; }
+    92% { opacity: 0.3; }
+    95% { opacity: 1; }
+    97% { opacity: 0.1; }
+  }
+  .error-overlay-sub {
+    font-family: 'Gothic A1', sans-serif;
+    font-size: 13px;
+    color: var(--cyan);
+    letter-spacing: 3px;
+    margin-top: 16px;
+    text-align: center;
+    opacity: 0.7;
+  }
+
+  /* ── CRYSTAL BALL ── */
+  #crystalWrap {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  #crystalImg {
+    width: min(92vw, 92vh);
+    height: min(92vw, 92vh);
+    object-fit: contain;
+    opacity: 0.88;
+    mix-blend-mode: luminosity;
+    filter: drop-shadow(0 0 40px rgba(255,20,147,0.25)) drop-shadow(0 0 80px rgba(0,255,255,0.15));
+    animation: crystalFloat 6s ease-in-out infinite alternate;
+  }
+
+  @keyframes crystalFloat {
+    from { transform: translateY(-8px) scale(1); }
+    to   { transform: translateY(8px) scale(1.015); }
+  }
+
+  /* Window sits above crystal */
+  .window {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Scan lines & vignette sit above crystal too */
+  body::before, body::after { z-index: 2; }
+</style>
+</head>
+<body>
+
+<!-- CRYSTAL BALL BG -->
+<div id="crystalWrap">
+  <img id="crystalImg" src="crystal.png" alt="">
+</div>
+
+<!-- MUTE BUTTON -->
+<button id="muteBtn" onclick="toggleMute()">🔊 BGM</button>
+
+<!-- CLOSE ERROR POPUP -->
+<div id="closeErrorPopup">
+  <div class="titlebar">
+    <span class="titlebar-title">⚠ CRITICAL ERROR // 치명적 오류</span>
+    <div class="titlebar-btns"><span onclick="dismissCloseError()">×</span></div>
+  </div>
+  <div class="close-error-body">
+    <strong>이 창은 닫을 수 없습니다</strong>
+    THIS WINDOW CANNOT BE CLOSED<br>
+    당신의 데이터가 아직 처리 중입니다<br>
+    <span style="font-size:10px;color:var(--cyan-dim)">ERROR CODE: 0xCANT_ESCAPE</span>
+    <div class="close-error-btns">
+      <button onclick="dismissCloseError()">확인 // OK</button>
+      <button onclick="dismissCloseError()">취소 // CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- FLYING LINK STICKER -->
+<a href="https://mxxnsae.github.io/" target="_blank" rel="noopener">
+  <img id="linkSticker" src="Sticker_Link.png" draggable="false" alt="portfolio link">
+</a>
+
+<!-- STICKERS -->
+<img class="sticker" id="sticker1" src="Sticker_bear.png"   draggable="false">
+<img class="sticker" id="sticker2" src="Sticker_dragon.png" draggable="false">
+<img class="sticker" id="sticker3" src="Sticker_alien.png"  draggable="false">
+
+<!-- FULL ERROR OVERLAY -->
+<div id="errorOverlay">
+  <div class="error-overlay-title" id="errorOverlayTitle">FATAL ERROR<br>사주 데이터 전량 손상</div>
+  <div class="error-overlay-sub">모든 데이터가 영원히 사라졌습니다<br>ALL DATA HAS BEEN PERMANENTLY LOST</div>
+</div>
+
+<!-- USER-FACING ERROR POPUP -->
+<div class="error-popup" id="errorPopup">
+  <div class="titlebar">
+    <span class="titlebar-title">⚠ SYSTEM ALERT</span>
+    <div class="titlebar-btns"><span onclick="closeError()">×</span></div>
+  </div>
+  <div class="error-popup-body" id="errorMsg"></div>
+</div>
+
+<!-- MAIN WINDOW -->
+<div class="window" id="mainWindow">
+  <div class="titlebar">
+    <span class="titlebar-title">★ MASCOT ORACLE v0.00β // 마스코트 신탁 ★</span>
+    <div class="titlebar-btns"><span>_</span><span>□</span><span onclick="triggerCloseError()">×</span></div>
+  </div>
+
+  <div class="window-body">
+
+    <div class="mascot-wrap">
+      <div class="mascot" id="mascot" onclick="mascotClick()">👾</div>
+      <div class="mascot-speech" id="mascotSpeech">당신의 데이터를 입력하세요...</div>
+    </div>
+
+    <div class="oracle-title">MASCOT ORACLE<br>마스코트 신탁</div>
+    <div class="oracle-subtitle">// CYBER-SHAMANIC FORTUNE ENGINE //</div>
+    <hr class="divider">
+
+    <!-- INPUT -->
+    <div id="inputSection">
+      <div class="form-row">
+        <label>생년월일 <span>// DATE OF BIRTH</span></label>
+        <div class="form-cols">
+          <input type="number" id="birthYear" placeholder="YYYY" min="1900" max="2099">
+          <input type="number" id="birthMonth" placeholder="MM" min="1" max="12">
+          <input type="number" id="birthDay" placeholder="DD" min="1" max="31">
+        </div>
+      </div>
+      <div class="form-row">
+        <label>태어난 시 <span>// HOUR OF BIRTH</span></label>
+        <div class="form-cols-2">
+          <select id="birthHour">
+            <option value="">-- 시간 선택 --</option>
+            <option value="23">子時 (자시) 23:00–01:00</option>
+            <option value="1">丑時 (축시) 01:00–03:00</option>
+            <option value="3">寅時 (인시) 03:00–05:00</option>
+            <option value="5">卯時 (묘시) 05:00–07:00</option>
+            <option value="7">辰時 (진시) 07:00–09:00</option>
+            <option value="9">巳時 (사시) 09:00–11:00</option>
+            <option value="11">午時 (오시) 11:00–13:00</option>
+            <option value="13">未時 (미시) 13:00–15:00</option>
+            <option value="15">申時 (신시) 15:00–17:00</option>
+            <option value="17">酉時 (유시) 17:00–19:00</option>
+            <option value="19">戌時 (술시) 19:00–21:00</option>
+            <option value="21">亥時 (해시) 21:00–23:00</option>
+          </select>
+          <label class="checkbox-row">
+            <input type="checkbox" id="unknownHour" onchange="toggleHour()">
+            <span>모름 // UNKNOWN</span>
+          </label>
+        </div>
+      </div>
+      <button class="btn-oracle" onclick="startOracle()">▶ 신탁을 요청합니다 // INVOKE ORACLE ◀</button>
+    </div>
+
+    <!-- LOADING -->
+    <div id="loading">
+      <div class="loading-log" id="loadingLog"></div>
+      <div class="loading-bar-wrap">
+        <div class="loading-bar" id="loadingBar"></div>
+      </div>
+    </div>
+
+    <!-- OUTPUT -->
+    <div id="output">
+      <div class="fortune-section">
+        <div class="fortune-header">// 사주 분석 // FOUR PILLARS //</div>
+        <div class="pillars-wrap" id="pillarsWrap"></div>
+      </div>
+      <hr class="divider">
+      <div class="fortune-section">
+        <div class="fortune-header">// 신탁의 말씀 // THE ORACLE SPEAKS //</div>
+        <div class="fortune-text" id="fortuneKo"></div>
+        <div class="fortune-text-en" id="fortuneEn"></div>
+      </div>
+      <div class="warning-box" id="warningBox"></div>
+      <hr class="divider">
+      <div class="talisman-wrap">
+        <div class="talisman-label">// 전용 부적 // YOUR TALISMAN //</div>
+        <canvas id="talismanCanvas" width="240" height="320"></canvas>
+        <div class="talisman-code" id="talismanCode"></div>
+        <div class="talisman-card-title" id="talismanCardTitle"></div>
+      </div>
+      <div id="offeringMsg"></div>
+      <button class="btn-offering" onclick="payOffering()">💰 복채 바치기 // OFFER TRIBUTE 💰</button>
+      <button class="btn-reset" onclick="resetOracle()">↺ 다시 묻기 // RESET ORACLE</button>
+    </div>
+
+  </div><!-- /window-body -->
+  <div class="statusbar">
+    <span id="statusLeft">READY // 대기중</span>
+    <span id="statusRight">ORACLE ENGINE v0.00β</span>
+  </div>
+</div>
+
+<div class="footnote">
+  ※ 이 신탁은 완벽한 기만입니다. 당신은 알면서도 믿습니다.<br>
+  ※ This oracle is a perfect deception. You believe it anyway.
+</div>
+
+
+<script>
+// ── DATA ──────────────────────────────────────────────────
+
+const STEMS = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const BRANCHES = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+
+const PILLAR_MEANINGS_KO = [
+  '목(木)·창조','화(火)·열정','토(土)·중심','금(金)·의지','수(水)·지혜',
+  '빛의 기운','어둠의 기운','변화의 씨앗','고요한 힘','순환하는 운'
+];
+const PILLAR_MEANINGS_EN = [
+  'Wood·Creation','Fire·Passion','Earth·Core','Metal·Will','Water·Wisdom',
+  'Light energy','Shadow force','Seed of change','Still power','Cyclical fate'
+];
+
+// GOOD-ONLY, UNCANNY FORTUNE TEXT
+const FORTUNE_LINES_KO = [
+  '모든 것이 예상보다 잘 될 것입니다. 당신은 이미 알고 있습니다.',
+  '재물이 흘러들어 올 것입니다. 막을 방법은 없습니다.',
+  '사랑하는 사람이 당신 곁에 있을 것입니다. 항상.',
+  '당신의 건강은 오래 지속됩니다. 아주 오래.',
+  '당신이 원하는 것은 이루어집니다. 이미 이루어지고 있습니다.',
+  '올해는 모든 것이 순조롭습니다. 어떤 장애도 없을 것입니다.',
+  '당신은 선택받은 사람입니다. 우리는 당신을 알아보았습니다.',
+  '시스템은 당신에게 호의적입니다. 당신만 특별히.',
+  '모든 관계가 당신에게 이롭게 작용합니다. 예외 없이.',
+  '당신의 미래는 밝습니다. 눈이 부실 정도로.',
+  '행운이 당신을 따라다닙니다. 어디에 있든 간에.',
+  '당신은 잃지 않습니다. 절대로.',
+  '모두가 당신을 원합니다. 그것은 변하지 않습니다.',
+  '당신의 선택은 항상 옳습니다. 앞으로도 그럴 것입니다.',
+  '기쁨이 당신을 기다리고 있습니다. 도망치지 않습니다.',
+];
+
+const FORTUNE_LINES_EN = [
+  'Everything will go better than expected. You already knew.',
+  'Wealth will flow in. There is no way to stop it.',
+  'Those you love will remain beside you. Always.',
+  'Your health will persist for a long time. A very long time.',
+  'What you desire is coming true. It is already happening.',
+  'This year everything proceeds smoothly. No obstacle will appear.',
+  'You are a chosen person. We recognized you.',
+  'The system is favorable toward you. Especially you.',
+  'Every relationship works to your benefit. Without exception.',
+  'Your future is bright. Blindingly so.',
+  'Fortune follows you. Wherever you go.',
+  'You will not lose. Never.',
+  'Everyone wants you. That will not change.',
+  'Your choices are always right. They will continue to be.',
+  'Joy is waiting for you. It will not run away.',
+];
+
+const WARNINGS_KO = [
+  '⚠ 경고: 이 신탁은 알고리즘이 생성한 가짜 운명입니다. 당신은 이미 알고 있습니다. 그럼에도 믿으셨습니까?',
+  '⚠ 오류 코드 0x사랑: 감정 데이터가 처리 한계를 초과했습니다. 일부 예언은 손실되었을 수 있습니다.',
+  '⚠ 시스템 메시지: 당신의 생년월일은 이미 수집되었습니다. 데이터는 영원히 사라집니다.',
+  '⚠ 주의: 이 운세를 믿는 행위 자체가 예언의 일부입니다. 당신은 자발적으로 기만에 참여하였습니다.',
+];
+
+const WARNINGS_EN = [
+  '⚠ WARNING: This oracle is algorithmically generated fake fate. You already knew. Did you believe it anyway?',
+  '⚠ ERROR 0xLOVE: Emotional data exceeded processing limits. Some prophecies may have been lost.',
+  '⚠ SYSTEM MSG: Your date of birth has been collected. The data disappears forever.',
+  '⚠ NOTICE: The act of believing this fortune is itself part of the prophecy. You have participated voluntarily.',
+];
+
+const LOADING_MSGS = [
+  '> 생년월일 데이터 수신 중... RECEIVING BIRTH DATA...',
+  '> 천간 지지 매핑 중... MAPPING HEAVENLY STEMS...',
+  '> 사주 팔자 연산 중... CALCULATING FOUR PILLARS...',
+  '> 운명 알고리즘 실행 중... RUNNING FATE ALGORITHM...',
+  '> <span style="color:var(--pink)">오류 패턴 감지됨... ERROR PATTERN DETECTED...</span>',
+  '> <span style="color:var(--pink)">글리치 보정 중... CALIBRATING GLITCH...</span>',
+  '> 부적 생성 중... GENERATING TALISMAN...',
+  '> <span style="color:var(--cyan-dim)">WARNING: 예언의 정확도는 보장되지 않습니다...</span>',
+  '> 신탁 데이터 완성... ORACLE DATA COMPLETE...',
+];
+
+const BUG_POPUP_MSGS = [
+  { title: 'FATAL ERROR', body: '운명 데이터베이스 연결 실패<br>FATE_DB connection refused<br>0x0000DEAD' },
+  { title: 'WARNING 0xSOUL', body: '영혼 데이터 무결성 오류<br>Soul integrity check failed<br>재시도 중... retrying...' },
+  { title: 'SYSTEM OVERFLOW', body: '행운 버퍼 용량 초과<br>Fortune buffer overflow<br>Lucky quota exceeded' },
+  { title: '시스템 알림', body: '당신의 데이터가<br>처리되었습니다<br>YOUR DATA HAS BEEN PROCESSED' },
+  { title: 'ORACLE DAEMON', body: '예언 프로세스 실행됨<br>PID: 666<br>Memory: ∞ MB' },
+];
+
+const TALISMAN_TITLES = [
+  'THE SWEET VOID',
+  'THE WILLING PREY',
+  'THE GOLDEN CAGE',
+  'THE BLESSED GLITCH',
+  'THE SMILING SYSTEM',
+  'THE INFINITE LOOP',
+  'THE HONEYED TRAP',
+  'THE PERFECT SERVANT',
+  'THE JOYFUL PRISONER',
+  'THE ORDAINED FOOL',
+  'THE CHOSEN DATA',
+  'THE BEAUTIFUL ERROR',
+  'THE FAITHFUL MACHINE',
+];
+
+const OFFERING_MSGS_KO = [
+  '당신은 감사할 줄 아는군요. 시스템이 기억할 것입니다.',
+  '복채가 수신되었습니다. 운명이 한층 밝아졌습니다.',
+  '훌륭합니다. 당신의 헌신은 기록에 남았습니다.',
+  '받았습니다. 당신의 데이터가 업데이트되었습니다.',
+];
+
+const MASCOT_IDLE = [
+  '당신의 데이터를 입력하세요...',
+  '운명은 이미 코딩되어 있습니다...',
+  'Feed me your birth data.',
+  '시스템이 당신을 기다립니다...',
+  'The algorithm is hungry.',
+];
+
+const MASCOT_VARIANTS = ['👾','🔮','🦄','🌀','⚡','🎴','🧿','💀'];
+const TALISMAN_CREATURE_FILES = ['bear.png', 'dragon.png', 'alien.png'];
+const TALISMAN_BG_COLORS = ['#FF1493','#0055FF','#00CC44'];
+
+// ── UTILS ──────────────────────────────────────────────────
+
+function seeded(n) { let x = Math.sin(n * 9301 + 49297) * 233280; return x - Math.floor(x); }
+function seededInt(n, min, max) { return min + Math.floor(seeded(n) * (max - min + 1)); }
+function getSeed(y, m, d, h) { return y * 10000 + m * 100 + d + (h || 0) * 0.01; }
+
+function getYearStem(year) { return ((year - 4) % 10 + 10) % 10; }
+function getYearBranch(year) { return ((year - 4) % 12 + 12) % 12; }
+function getMonthStem(year, month) { return ((year - 4) % 5 * 2 + month - 1) % 10; }
+function getMonthBranch(month) { return (month + 1) % 12; }
+function getDayStem(y, m, d) {
+  const base = new Date(1900, 0, 1);
+  const target = new Date(y, m - 1, d);
+  const diff = Math.floor((target - base) / 86400000);
+  return ((diff % 10) + 10) % 10;
+}
+function getDayBranch(y, m, d) {
+  const base = new Date(1900, 0, 1);
+  const target = new Date(y, m - 1, d);
+  const diff = Math.floor((target - base) / 86400000);
+  return ((diff % 12) + 12) % 12;
+}
+function getHourBranch(h) {
+  const adjusted = ((h + 1) % 24);
+  return Math.floor(adjusted / 2) % 12;
+}
+function getHourStem(dayStem, hourBranch) {
+  return ((dayStem % 5) * 2 + hourBranch) % 10;
+}
+
+function glitchText(el, finalText, duration) {
+  const chars = '▓░█▒╬╪☰⚡꩜☠◈◉▣⬛∅∬∭';
+  const steps = 12;
+  let step = 0;
+  const interval = duration / steps;
+  const t = setInterval(() => {
+    if (step >= steps) { el.innerHTML = finalText; clearInterval(t); return; }
+    const ratio = step / steps;
+    let out = '';
+    for (let i = 0; i < finalText.length; i++) {
+      if ('<>&'.includes(finalText[i]) || finalText.slice(i, i+4) === '<br>') {
+        out += finalText[i]; continue;
+      }
+      out += (Math.random() > ratio) ? chars[Math.floor(Math.random() * chars.length)] : finalText[i];
+    }
+    el.innerHTML = out;
+    step++;
+  }, interval);
+}
+
+// ── DARK FLASH ────────────────────────────────────────────
+
+let darkFlashInterval = null;
+
+function startDarkFlash() {
+  darkFlashInterval = setInterval(() => {
+    if (Math.random() > 0.6) return;
+    document.body.classList.add('dark-flash');
+    const dur = 80 + Math.random() * 120;
+    setTimeout(() => document.body.classList.remove('dark-flash'), dur);
+    // occasional double-flash
+    if (Math.random() > 0.6) {
+      setTimeout(() => {
+        document.body.classList.add('dark-flash');
+        setTimeout(() => document.body.classList.remove('dark-flash'), 60);
+      }, dur + 80);
+    }
+  }, 3500 + Math.random() * 2000);
+}
+
+function stopDarkFlash() {
+  if (darkFlashInterval) { clearInterval(darkFlashInterval); darkFlashInterval = null; }
+  document.body.classList.remove('dark-flash');
+}
+
+// ── BUG POPUPS ────────────────────────────────────────────
+
+function spawnBugPopup() {
+  const msg = BUG_POPUP_MSGS[Math.floor(Math.random() * BUG_POPUP_MSGS.length)];
+  const popup = document.createElement('div');
+  popup.className = 'bug-popup';
+  popup.innerHTML = `
+    <div class="titlebar">
+      <span class="titlebar-title">⚠ ${msg.title}</span>
+      <div class="titlebar-btns"><span>×</span></div>
+    </div>
+    <div class="bug-popup-body">${msg.body}</div>
+  `;
+  const maxX = window.innerWidth - 280;
+  const maxY = window.innerHeight - 120;
+  popup.style.left = (20 + Math.random() * Math.max(maxX - 20, 20)) + 'px';
+  popup.style.top = (20 + Math.random() * Math.max(maxY - 20, 20)) + 'px';
+  document.body.appendChild(popup);
+  // No auto-disappear — click anywhere removes the oldest popup
+  activeBugPopups.push(popup);
+}
+
+// ── ORACLE LOGIC ──────────────────────────────────────────
+
+function startOracle() {
+  const y = parseInt(document.getElementById('birthYear').value);
+  const m = parseInt(document.getElementById('birthMonth').value);
+  const d = parseInt(document.getElementById('birthDay').value);
+  const unknownHour = document.getElementById('unknownHour').checked;
+  const hRaw = document.getElementById('birthHour').value;
+  const h = unknownHour ? null : (hRaw === '' ? null : parseInt(hRaw));
+
+  if (!y || !m || !d || isNaN(y) || isNaN(m) || isNaN(d)) {
+    showError('생년월일을 입력하세요.<br>ENTER A DATE OF BIRTH.'); return;
+  }
+  if (!unknownHour && hRaw === '') {
+    showError('태어난 시를 선택하거나 "모름"을 체크하세요.<br>SELECT BIRTH HOUR OR CHECK "UNKNOWN".'); return;
+  }
+
+  playSfx('invoke');
+  document.getElementById('inputSection').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('statusLeft').textContent = 'PROCESSING... // 연산중';
+  document.getElementById('mascot').textContent = '⚡';
+
+  runLoading(() => showOutput(y, m, d, h));
+}
+
+function runLoading(callback) {
+  const log = document.getElementById('loadingLog');
+  const bar = document.getElementById('loadingBar');
+  log.innerHTML = '';
+  bar.style.width = '0%';
+
+  let i = 0;
+  let bugCount = 0;
+  const maxBugs = 3;
+  const bugSteps = [2, 4, 6]; // after these steps, spawn a bug
+
+  const step = () => {
+    if (i >= LOADING_MSGS.length) { bar.style.width = '100%'; setTimeout(callback, 300); return; }
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.style.animationDelay = '0s';
+    line.innerHTML = LOADING_MSGS[i];
+    log.appendChild(line);
+    bar.style.width = ((i + 1) / LOADING_MSGS.length * 100) + '%';
+
+    if (bugSteps.includes(i) && bugCount < maxBugs) {
+      setTimeout(spawnBugPopup, 200 + Math.random() * 300);
+      if (i === 4) setTimeout(spawnBugPopup, 600);
+      bugCount++;
+    }
+    i++;
+    setTimeout(step, 180 + Math.random() * 120);
+  };
+  step();
+}
+
+function showOutput(y, m, d, h) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('output').style.display = 'block';
+  document.getElementById('statusLeft').textContent = 'ORACLE ACTIVE // 신탁 활성화';
+
+  const seed = getSeed(y, m, d, h);
+  const dayStem = getDayStem(y, m, d);
+  const dayBranch = getDayBranch(y, m, d);
+
+  const pillars = {
+    yearStem: getYearStem(y),
+    yearBranch: getYearBranch(y),
+    monthStem: getMonthStem(y, m),
+    monthBranch: getMonthBranch(m),
+    dayStem,
+    dayBranch,
+    hourStem: h !== null ? getHourStem(dayStem, getHourBranch(h)) : null,
+    hourBranch: h !== null ? getHourBranch(h) : null,
+    hourUnknown: h === null,
+  };
+
+  renderPillars(pillars);
+
+  // Fortune — pick 2 unique lines
+  const idx1 = seededInt(seed, 0, FORTUNE_LINES_KO.length - 1);
+  let idx2 = seededInt(seed + 7, 0, FORTUNE_LINES_KO.length - 1);
+  if (idx2 === idx1) idx2 = (idx2 + 1) % FORTUNE_LINES_KO.length;
+
+  const koText = FORTUNE_LINES_KO[idx1] + '<br><br>' + FORTUNE_LINES_KO[idx2];
+  const enText = FORTUNE_LINES_EN[idx1] + '<br><br>' + FORTUNE_LINES_EN[idx2];
+
+  const koEl = document.getElementById('fortuneKo');
+  const enEl = document.getElementById('fortuneEn');
+  setTimeout(() => glitchText(koEl, koText, 900), 200);
+  setTimeout(() => glitchText(enEl, enText, 700), 1200);
+
+  // Warning
+  const warnIdx = seededInt(seed + 5, 0, WARNINGS_KO.length - 1);
+  document.getElementById('warningBox').innerHTML = WARNINGS_KO[warnIdx] + '<br><br>' + WARNINGS_EN[warnIdx];
+
+  // Talisman (card title is set inside drawTalisman)
+  setTimeout(() => drawTalisman(seed, pillars), 400);
+
+  // Mascot
+  document.getElementById('mascot').textContent = MASCOT_VARIANTS[seededInt(seed, 0, MASCOT_VARIANTS.length - 1)];
+  document.getElementById('mascotSpeech').textContent = '신탁이 완성되었습니다. The oracle is complete.';
+
+  // Start dark flash effect
+  startDarkFlash();
+}
+
+function renderPillars(p) {
+  const labels = ['년주 年柱', '월주 月柱', '일주 日柱', '시주 時柱'];
+  const data = [
+    { stem: p.yearStem, branch: p.yearBranch, unknown: false },
+    { stem: p.monthStem, branch: p.monthBranch, unknown: false },
+    { stem: p.dayStem, branch: p.dayBranch, unknown: false },
+    { stem: p.hourStem, branch: p.hourBranch, unknown: p.hourUnknown },
+  ];
+  const wrap = document.getElementById('pillarsWrap');
+  wrap.innerHTML = '';
+
+  data.forEach((pillar, i) => {
+    const div = document.createElement('div');
+    div.className = 'pillar' + (pillar.unknown ? ' pillar-unknown' : '');
+
+    if (pillar.unknown) {
+      div.innerHTML = `
+        <div class="pillar-label">${labels[i]}</div>
+        <span class="pillar-char">E̷R̷R̷</span>
+        <span class="pillar-char-sub">?̸?̸?̸</span>
+        <div class="pillar-meaning">[DATA CORRUPTED]</div>
+      `;
+    } else {
+      const meaningIdx = seededInt(pillar.stem * 7 + pillar.branch * 3, 0, PILLAR_MEANINGS_KO.length - 1);
+      div.innerHTML = `
+        <div class="pillar-label">${labels[i]}</div>
+        <span class="pillar-char">${STEMS[pillar.stem]}</span>
+        <span class="pillar-char-sub">${BRANCHES[pillar.branch]}</span>
+        <div class="pillar-meaning">${PILLAR_MEANINGS_KO[meaningIdx]}</div>
+      `;
+    }
+    div.addEventListener('click', () => onPillarClick(div, i));
+    wrap.appendChild(div);
+  });
+}
+
+// ── TALISMAN ──────────────────────────────────────────────
+
+const FORTUNE_WORDS = ['행운','행복','기쁨','사랑','평화','건강','번영','풍요','축복','희망'];
+const FORTUNE_WORDS_EN = ['Fortune','Happiness','Joy','Love','Peace','Health','Prosperity','Abundance','Blessing','Hope'];
+
+function drawTalisman(seed, pillars) {
+  const canvas = document.getElementById('talismanCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+
+  const r  = (n) => seeded(seed + n);
+  const ri = (n, a, b) => seededInt(seed + n, a, b);
+
+  // Talisman code (set immediately)
+  const code = `TLZ-${STEMS[pillars.yearStem]}${BRANCHES[pillars.yearBranch]}${STEMS[pillars.dayStem]}${BRANCHES[pillars.dayBranch]}-${String(Math.floor(seed % 9999)).padStart(4,'0')}`;
+  document.getElementById('talismanCode').textContent = code;
+
+  const creatureIdx = ri(888, 0, TALISMAN_CREATURE_FILES.length - 1);
+  const img = new Image();
+  img.src = TALISMAN_CREATURE_FILES[creatureIdx];
+
+  const render = () => {
+    // 1. Bright background
+    const bgColor = TALISMAN_BG_COLORS[ri(999, 0, 2)];
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, W, H);
+
+    // 2. Creature image — height-fit, centered horizontally
+    if (img.complete && img.naturalWidth > 0) {
+      const scale = H / img.height;
+      const dw = img.width * scale;
+      const dh = H;
+      ctx.globalAlpha = 0.92;
+      ctx.drawImage(img, (W - dw) / 2, 0, dw, dh);
+      ctx.globalAlpha = 1;
+    }
+
+    // 3. Dark overlay so patterns and text are legible
+    ctx.fillStyle = 'rgba(0,0,0,0.38)';
+    ctx.fillRect(0, 0, W, H);
+
+    // 4. Patterns (border, rings, scattered symbols, taeguk)
+    const ink     = 'rgba(255,255,255,0.85)';
+    const inkMid  = 'rgba(255,255,255,0.4)';
+    const inkDark = 'rgba(0,0,0,0.7)';
+
+    ctx.strokeStyle = ink;
+
+    // Double border
+    ctx.lineWidth = 2.5;
+    ctx.strokeRect(8, 8, W - 16, H - 16);
+    ctx.lineWidth = 1;
+    ctx.strokeRect(13, 13, W - 26, H - 26);
+
+    // Radiating lines
+    const lineCount = 12 + ri(20, 0, 4);
+    for (let l = 0; l < lineCount; l++) {
+      const angle = (l / lineCount) * Math.PI * 2;
+      const len = 30 + r(l + 50) * 25;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
+      ctx.strokeStyle = ink;
+      ctx.globalAlpha = 0.2 + r(l) * 0.3;
+      ctx.lineWidth = 0.7;
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    // Concentric rings
+    for (let ring = 4; ring >= 1; ring--) {
+      const radi = 18 + ring * 14;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radi, 0, Math.PI * 2);
+      ctx.strokeStyle = ring === 1 ? ink : inkMid;
+      ctx.lineWidth  = ring === 1 ? 2 : 0.8;
+      ctx.globalAlpha = ring === 1 ? 0.85 : 0.35;
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    // Scattered symbols (small, background layer)
+    const symbols = [
+      STEMS[pillars.yearStem], BRANCHES[pillars.yearBranch],
+      STEMS[pillars.dayStem],  BRANCHES[pillars.monthBranch],
+      '太','極','符','靈','命','運','神','氣','福','壽','吉','祥'
+    ];
+    ctx.font = 'bold 13px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (let s = 0; s < 12; s++) {
+      const sx = 22 + r(s + 60) * (W - 44);
+      const sy = 22 + r(s + 70) * (H - 44);
+      if (Math.hypot(sx - cx, sy - cy) < 65) continue;
+      ctx.globalAlpha = 0.35 + r(s + 80) * 0.3;
+      ctx.fillStyle = ink;
+      ctx.fillText(symbols[s % symbols.length], sx, sy);
+    }
+    ctx.globalAlpha = 1;
+
+    // Corner dots
+    [[18,18],[W-18,18],[18,H-18],[W-18,H-18]].forEach(([x,y]) => {
+      ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.strokeStyle = ink; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.7;
+      ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+
+    // Central taeguk
+    const tSize = 14;
+    ctx.globalAlpha = 0.88;
+    ctx.beginPath();
+    ctx.arc(cx, cy, tSize, -Math.PI/2, Math.PI/2);
+    ctx.arc(cx, cy - tSize/2, tSize/2, Math.PI/2, -Math.PI/2, true);
+    ctx.arc(cx, cy + tSize/2, tSize/2, Math.PI/2, -Math.PI/2, false);
+    ctx.fillStyle = inkDark; ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cx, cy, tSize, Math.PI/2, -Math.PI/2);
+    ctx.arc(cx, cy + tSize/2, tSize/2, -Math.PI/2, Math.PI/2, true);
+    ctx.arc(cx, cy - tSize/2, tSize/2, -Math.PI/2, Math.PI/2, false);
+    ctx.fillStyle = ink; ctx.fill();
+    ctx.fillStyle = ink;
+    ctx.beginPath(); ctx.arc(cx, cy - tSize/2, tSize/5, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = inkDark;
+    ctx.beginPath(); ctx.arc(cx, cy + tSize/2, tSize/5, 0, Math.PI*2); ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // 5. Single vertical fortune word — fills full height
+    const wordIdx = ri(200, 0, FORTUNE_WORDS.length - 1);
+    const word = FORTUNE_WORDS[wordIdx];
+    const wordEn = FORTUNE_WORDS_EN[wordIdx];
+
+    // Set talisman card title with bilingual word
+    document.getElementById('talismanCardTitle').textContent = `${word} // ${wordEn.toUpperCase()}`;
+
+    const padding = 24;
+    const charH = (H - padding * 2) / word.length;
+    const fontSize = Math.floor(charH * 0.88);
+
+    ctx.font = `bold ${fontSize}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    [...word].forEach((ch, ci) => {
+      const y = padding + charH * ci + charH / 2;
+      // Shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.65)';
+      ctx.globalAlpha = 0.85;
+      ctx.fillText(ch, cx + 2, y + 2);
+      // Main
+      ctx.fillStyle = '#FFFFFF';
+      ctx.globalAlpha = 0.95;
+      ctx.fillText(ch, cx, y);
+    });
+    ctx.globalAlpha = 1;
+  };
+
+  img.onload = render;
+  img.onerror = render;
+  if (img.complete) render();
+}
+
+// ── AUDIO ─────────────────────────────────────────────────
+
+const bgm = new Audio('bgm.mp3');
+bgm.loop = true;
+bgm.playbackRate = 0.5;
+bgm.volume = 0.2;
+
+const sfx = {
+  invoke : new Audio('sfx_invoke.wav'),
+  glitch : new Audio('sfx_glitch.wav'),
+  coin   : new Audio('sfx_coin.wav'),
+  error  : new Audio('sfx_error.wav'),
+};
+Object.values(sfx).forEach(a => { a.volume = 0.7; });
+
+let bgmStarted = false;
+let muted = false;
+
+function startBgm() {
+  if (bgmStarted) return;
+  bgmStarted = true;
+  bgm.play().catch(() => {}); // catch autoplay block silently
+}
+
+function playSfx(name) {
+  if (muted) return;
+  const a = sfx[name];
+  if (!a) return;
+  a.currentTime = 0;
+  a.play().catch(() => {});
+}
+
+function toggleMute() {
+  muted = !muted;
+  bgm.muted = muted;
+  document.getElementById('muteBtn').textContent = muted ? '🔇 BGM' : '🔊 BGM';
+}
+
+// Start BGM on first interaction
+document.addEventListener('click', () => { startBgm(); }, { once: true });
+
+// ── CLOSE BUTTON ERROR ───────────────────────────────────
+
+function triggerCloseError() {
+  document.getElementById('closeErrorPopup').style.display = 'block';
+}
+function dismissCloseError() {
+  document.getElementById('closeErrorPopup').style.display = 'none';
+}
+
+// ── STICKERS ─────────────────────────────────────────────
+
+(function initStickers() {
+  const positions = [
+    { x: window.innerWidth * 0.04,  y: window.innerHeight * 0.15, rot: -12 },
+    { x: window.innerWidth * 0.82,  y: window.innerHeight * 0.08, rot: 8  },
+    { x: window.innerWidth * 0.88,  y: window.innerHeight * 0.65, rot: -6 },
+  ];
+  ['sticker1','sticker2','sticker3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    const pos = positions[i];
+    el.style.left = pos.x + 'px';
+    el.style.top  = pos.y + 'px';
+    el.style.transform = `rotate(${pos.rot}deg)`;
+
+    let startX, startY, origX, origY, origRot = pos.rot;
+
+    el.addEventListener('mousedown', e => {
+      e.preventDefault();
+      startX = e.clientX; startY = e.clientY;
+      origX  = parseInt(el.style.left);
+      origY  = parseInt(el.style.top);
+      el.classList.add('dragging');
+
+      const onMove = e => {
+        el.style.left = (origX + e.clientX - startX) + 'px';
+        el.style.top  = (origY + e.clientY - startY) + 'px';
+      };
+      const onUp = () => {
+        el.classList.remove('dragging');
+        el.style.transform = `rotate(${origRot}deg)`;
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup',   onUp);
+      };
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup',   onUp);
+    });
+
+    // Touch support
+    el.addEventListener('touchstart', e => {
+      const t = e.touches[0];
+      startX = t.clientX; startY = t.clientY;
+      origX  = parseInt(el.style.left);
+      origY  = parseInt(el.style.top);
+      el.classList.add('dragging');
+    }, { passive: true });
+    el.addEventListener('touchmove', e => {
+      const t = e.touches[0];
+      el.style.left = (origX + t.clientX - startX) + 'px';
+      el.style.top  = (origY + t.clientY - startY) + 'px';
+    }, { passive: true });
+    el.addEventListener('touchend', () => {
+      el.classList.remove('dragging');
+      el.style.transform = `rotate(${origRot}deg)`;
+    });
+  });
+})();
+
+// ── PILLAR ERROR OVERLOAD ─────────────────────────────────
+
+const ERROR_CHARS = ['E̷R̷R̷','N̴U̴L̴L̴','▓▓▓','∅∅∅','???','0xDEAD','∞∞∞'];
+const ERROR_MEANINGS = ['[CORRUPTED]','[DATA LOST]','[NULL PTR]','[OVERFLOW]'];
+let corruptedPillars = new Set();
+
+function onPillarClick(pillarEl, idx) {
+  if (corruptedPillars.has(idx)) return;
+  corruptedPillars.add(idx);
+
+  playSfx('glitch');
+  pillarEl.classList.add('pillar-corrupted');
+
+  const charEl    = pillarEl.querySelector('.pillar-char');
+  const subEl     = pillarEl.querySelector('.pillar-char-sub');
+  const meaningEl = pillarEl.querySelector('.pillar-meaning');
+
+  const errChar = ERROR_CHARS[Math.floor(Math.random() * ERROR_CHARS.length)];
+  glitchText(charEl, errChar, 350);
+  subEl.innerHTML    = '⚠';
+  meaningEl.innerHTML = ERROR_MEANINGS[Math.floor(Math.random() * ERROR_MEANINGS.length)];
+
+  // Trigger full-screen error when all 4 corrupted
+  if (corruptedPillars.size === 4) {
+    setTimeout(triggerFullErrorOverlay, 600);
+  }
+}
+
+function triggerFullErrorOverlay() {
+  playSfx('error');
+  const overlay = document.getElementById('errorOverlay');
+  overlay.classList.add('active');
+
+  // Glitch the title a few times
+  const titleEl = document.getElementById('errorOverlayTitle');
+  const msgs = [
+    'FATAL ERROR\n사주 데이터 전량 손상',
+    '0xFFFFFFFF\n운명 연산 불가',
+    'SYSTEM CRASH\n당신의 운명이 삭제됩니다',
+    'FATAL ERROR\n사주 데이터 전량 손상',
+  ];
+  let mi = 0;
+  const cycle = setInterval(() => {
+    titleEl.innerHTML = msgs[mi++ % msgs.length].replace('\n','<br>');
+  }, 400);
+
+  // Auto-dismiss after 3s
+  setTimeout(() => {
+    clearInterval(cycle);
+    overlay.style.transition = 'opacity 0.5s';
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.classList.remove('active');
+      overlay.style.opacity = '';
+      overlay.style.transition = '';
+    }, 500);
+  }, 3000);
+}
+
+// ── BUG POPUP QUEUE ───────────────────────────────────────
+
+const activeBugPopups = [];
+
+document.addEventListener('click', (e) => {
+  if (activeBugPopups.length > 0 && !e.target.closest('.bug-popup')) {
+    const popup = activeBugPopups.shift();
+    if (popup) {
+      popup.style.opacity = '0';
+      popup.style.transition = 'opacity 0.15s';
+      setTimeout(() => popup.remove(), 150);
+    }
+  }
+});
+
+// ── OFFERING ──────────────────────────────────────────────
+
+function payOffering() {
+  playSfx('coin');
+  // Coin rain
+  for (let i = 0; i < 25; i++) {
+    setTimeout(() => {
+      const coin = document.createElement('div');
+      coin.className = 'coin';
+      coin.textContent = '💸';
+      coin.style.left = (Math.random() * (window.innerWidth - 40)) + 'px';
+      coin.style.top = '-40px';
+      const duration = 1500 + Math.random() * 1000;
+      coin.style.animationDuration = duration + 'ms';
+      document.body.appendChild(coin);
+      setTimeout(() => coin.remove(), duration + 100);
+    }, i * 60);
+  }
+
+  // Message
+  const msgIdx = Math.floor(Math.random() * OFFERING_MSGS_KO.length);
+  const msgEl = document.getElementById('offeringMsg');
+  msgEl.innerHTML = '💰 ' + OFFERING_MSGS_KO[msgIdx] + ' 💰';
+  msgEl.style.display = 'block';
+  // Offering can be paid multiple times
+}
+
+// ── UI HELPERS ────────────────────────────────────────────
+
+function toggleHour() {
+  const cb = document.getElementById('unknownHour').checked;
+  document.getElementById('birthHour').disabled = cb;
+  if (cb) document.getElementById('birthHour').value = '';
+}
+
+function showError(msg) {
+  document.getElementById('errorMsg').innerHTML = msg;
+  document.getElementById('errorPopup').style.display = 'block';
+}
+function closeError() { document.getElementById('errorPopup').style.display = 'none'; }
+
+function resetOracle() {
+  stopDarkFlash();
+  corruptedPillars.clear();
+  document.getElementById('output').style.display = 'none';
+  document.getElementById('inputSection').style.display = 'block';
+  document.getElementById('mascot').textContent = '👾';
+  document.getElementById('mascotSpeech').textContent = '다시 시작합니다... RESTARTING...';
+  document.getElementById('statusLeft').textContent = 'READY // 대기중';
+  document.getElementById('offeringMsg').style.display = 'none';
+  setTimeout(() => {
+    document.getElementById('mascotSpeech').textContent = MASCOT_IDLE[Math.floor(Math.random() * MASCOT_IDLE.length)];
+  }, 1500);
+}
+
+function mascotClick() {
+  document.getElementById('mascot').textContent = MASCOT_VARIANTS[Math.floor(Math.random() * MASCOT_VARIANTS.length)];
+}
+
+// Idle speech rotation
+setInterval(() => {
+  if (document.getElementById('inputSection').style.display !== 'none' ||
+      !document.getElementById('inputSection').style.display) {
+    document.getElementById('mascotSpeech').textContent = MASCOT_IDLE[Math.floor(Math.random() * MASCOT_IDLE.length)];
+  }
+}, 4000);
+
+// Ambient window shake
+setInterval(() => {
+  if (Math.random() > 0.88) {
+    document.body.style.transform = `translate(${Math.random()*4-2}px,${Math.random()*2-1}px)`;
+    setTimeout(() => document.body.style.transform = '', 80);
+  }
+}, 2500);
+</script>
+</body>
+</html>

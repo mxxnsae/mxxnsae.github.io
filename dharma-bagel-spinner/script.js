@@ -109,6 +109,10 @@ function createBagel(bagelData, isUFO = false) {
 // Initialize first bagel
 createBagel(bagels[0], false);
 
+// Set random initial rotation
+bagel.rotation.y = Math.random() * Math.PI * 2;
+bagel.rotation.x = Math.random() * Math.PI * 2;
+
 // Set background
 scene.background = new THREE.Color(...bgColors[0]);
 

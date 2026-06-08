@@ -37,12 +37,12 @@ The entire stage becomes a single immersive interface designed to override human
 
 **Medium:** Interactive Kinetic Sculpture, Cybernetic Assemblage, Real-time Data Visualisation
 **Year:** 2026 *(Work in progress)*
-**Materials:** Children's Rocking Horse, Latex Raptor Skull, 2.5mm Metallic Pink Aluminium Wire, TPU Embossed Scale Fabric, Iridescent Gacha Capsule Shards, Mint Mink Fur, Acrylic Dome
+**Materials:** Children's Rocking Horse, Latex Raptor Skull, TPU Embossed Scale Fabric, Iridescent Gacha Capsule Shards, Mint Mink Fur, Acrylic Dome
 **Physical Computing:** MPU6050 accelerometer → TouchDesigner (wireless)
 
 A Western toy rocking horse is given the skull of a raptor — a scientific reconstruction — and reborn as the *Kirin*, the sacred Eastern beast of auspicious omen. The collision of categories is the point: the creature is a sublime error, an impossible synthesis that should not exist.
 
-An acrylic core embedded in the saddle replaces the absent rider. When an audience member shakes the creature — *Shaking to Awaken* — the MPU6050 sensor inside transmits live acceleration data to TouchDesigner, where it is processed into organic noise waves and glitch error logs. These are pixel-mapped in real time onto a 1.54" TFT display inside the acrylic core, visualising the animal's awakening as system instability: divinity rendered as malfunction.
+An acrylic core embedded in the saddle replaces the absent rider. When an audience member shakes the creature — *Shaking to Awaken* — the MPU6050 sensor inside transmits live acceleration data to TouchDesigner, where it is processed into organic noise waves. Pink LED rings behind the raptor skull's eye sockets respond to this data, flickering with violent urgency and casting light through the metallic wire mesh — divinity rendered as malfunction.
 
 ---
 

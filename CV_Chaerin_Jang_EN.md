@@ -6,7 +6,7 @@ mxxnsae@gmail.com · Instagram: @mxxnsaerin
 
 ## Education
 
-**B.A. in Interactive Media Design**
+**B.F.A. in Interactive Media Design**
 Hanyang University ERICA, Ansan, South Korea
 Mar 2019 – Feb 2025
 

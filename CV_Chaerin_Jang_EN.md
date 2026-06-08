@@ -80,6 +80,7 @@ Independent studio specializing in interactive installation, generative visual s
 
 ## Technical Skills
 
+**Physical Computing:** ESP32, Arduino, MPU6050
 **Real-time & Generative Systems:** TouchDesigner, p5.js, Processing
 **3D & Motion Graphics:** Blender, After Effects, Premiere Pro
 **VJ & Projection Mapping:** Resolume Arena, Madmapper

@@ -42,7 +42,7 @@ The entire stage becomes a single immersive interface designed to override human
 
 A Western toy rocking horse is given the skull of a raptor — a scientific reconstruction — and reborn as the *Kirin*, the sacred Eastern beast of auspicious omen. The collision of categories is the point: the creature is a sublime error, an impossible synthesis that should not exist.
 
-An acrylic core embedded in the saddle replaces the absent rider. When an audience member shakes the creature — *Shaking to Awaken* — the MPU6050 sensor inside transmits live acceleration data to TouchDesigner, where it is processed into organic noise waves. Pink LED rings behind the raptor skull's eye sockets respond to this data, flickering with violent urgency and casting light through the metallic wire mesh — divinity rendered as malfunction.
+An acrylic core embedded in the saddle replaces the absent rider. When an audience member shakes the creature — *Shaking to Awaken* — the MPU6050 sensor inside transmits live acceleration data to TouchDesigner, where it is processed into organic noise waves. Pink LED rings behind the raptor skull's eye sockets respond to this data, flickering with violent urgency — divinity rendered as malfunction.
 
 ---
 

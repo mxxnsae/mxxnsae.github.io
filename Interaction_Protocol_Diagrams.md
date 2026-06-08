@@ -30,36 +30,39 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    Input["Physical Input<br/>(Shaking Rocking Horse)"]
-    Sensor["MPU6050<br/>Accelerometer Sensor"]
-    Processing["TouchDesigner<br/>Real-time Processing"]
-    
-    DisplayOutput["TFT Display<br/>Error Logs<br/>SYSTEM UNSTABLE"]
-    LightOutput["LED + CCTV Dome<br/>Purple Light<br/>Sacred Halo"]
-    
-    Experience["User Experience<br/>Error becomes<br/>Divine/Beautiful"]
-    
-    Feedback["Feedback Loop<br/>Constraint becomes<br/>Seduction"]
-    
+    Input["Physical Input<br/>(Shaking / Rocking<br/>the Giraffe)"]
+    Sensor["MPU-6050<br/>Gyro + Accelerometer"]
+    ESP32["ESP32<br/>Real-time Processing<br/>(Energy Calculation)"]
+
+    EyeLED["Purple LED Eyes<br/>Brightness → Movement Intensity"]
+    Sound["Heartbeat Sound<br/>BPM → Movement Intensity<br/>⟨in development⟩"]
+    InternalGlow["Internal NeoPixel<br/>Body Glow<br/>⟨in development⟩"]
+
+    Experience["User Experience<br/>Hidden vitality<br/>revealed through motion"]
+    Feedback["Feedback Loop<br/>Motion invites<br/>more motion"]
+
     Input-->Sensor
-    Sensor-->Processing
-    Processing-->DisplayOutput
-    Processing-->LightOutput
-    DisplayOutput-->Experience
-    LightOutput-->Experience
+    Sensor-->ESP32
+    ESP32-->EyeLED
+    ESP32-->Sound
+    ESP32-->InternalGlow
+    EyeLED-->Experience
+    Sound-->Experience
+    InternalGlow-->Experience
     Experience-->Feedback
     Feedback-.->Input
 ```
 
 ### Description
-- **Physical Input**: User shakes/rocks the toy rocking horse
-- **MPU6050 Sensor**: Measures acceleration and motion intensity
-- **TouchDesigner Processing**: Translates sensor data into visual/audio output in real-time
-- **TFT Display Output**: Shows error logs (SYSTEM: UNSTABLE) indicating system malfunction
-- **LED + CCTV Dome Output**: Purple LEDs create a sacred, mystical atmosphere through the CCTV dome lens acting as a halo
-- **User Experience**: Error and instability become perceived as divine/sacred rather than broken
-- **Feedback Loop**: The beautiful constraint (error as sacred) encourages continued interaction
-- **Mechanism**: Malfunction becomes seduction; instability becomes transcendence
+- **Physical Input**: User shakes or sways the giraffe figure
+- **MPU-6050**: Measures gyroscopic velocity and acceleration; computes real-time "energy" value (0.0–1.0)
+- **ESP32**: Processes sensor data directly on-device — no external computer required
+- **Purple LED Eyes**: Brightness scales with movement intensity; off when still, bright when agitated
+- **Heartbeat Sound** *(in development)*: BPM increases with movement (50 BPM at rest → 140 BPM at peak); output via small speaker
+- **Internal NeoPixel Glow** *(in development)*: WS2812B ring inside the body radiates through perforations in the shell
+- **User Experience**: The giraffe's hidden life force is made visible and audible only through interaction
+- **Feedback Loop**: The more the user engages, the more life the object reveals
+- **Mechanism**: Stillness = dormancy; motion = emergence of vitality
 
 ---
 
@@ -85,9 +88,9 @@ Many markdown viewers (GitHub, VS Code, Notion) render Mermaid diagrams directly
 
 | Aspect | Gaksi Dokkaebi | Kirin |
 |--------|----------------|-------|
-| **Primary Medium** | Visual (Projection Mapping) | Kinetic + Visual + Sensory |
+| **Primary Medium** | Visual (Projection Mapping) | Sound + Light + Object |
 | **User Input** | Intentional (Dance) | Physical (Shaking) |
-| **System Response** | Pre-determined (Audio-reactive) | Real-time (Sensor-driven) |
-| **Illusion** | Synchronization that never existed | Error as sacred phenomenon |
-| **Complicity** | Dancer participates in self-deception | User seeks deeper interaction in malfunction |
-| **Design Mechanism** | Invisible alignment | Visible failure becomes beautiful |
+| **System Response** | Pre-determined (Audio-reactive) | Real-time (Sensor-driven, on-device) |
+| **Illusion** | Synchronization that never existed | Dormant life awakened by touch |
+| **Complicity** | Dancer participates in self-deception | User becomes the life source of the object |
+| **Design Mechanism** | Invisible alignment | Stillness as absence; motion as presence |

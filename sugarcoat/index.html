@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SUGARCOAT CENTER — 축복 생성기</title>
+<meta name="description" content="무조건 긍정. 본 축복은 데이터 기반이 아니라 위로 기반입니다.">
+
+<!--
+  ════════════════════════════════════════════════════════════
+   SUGARCOAT CENTER  ::  unconditional positivity
+   본 축복은 데이터 기반이 아니라 위로 기반입니다.
+  ────────────────────────────────────────────────────────────
+   당신이 적은 고민은 읽히지 않았습니다.
+   읽는 척만 했습니다. 그래도 위로가 되었다면, 그게 전부입니다.
+   Sugarcoat 는 거짓을 말하는 외계인입니다. 알면서도 속아주세요.
+  ════════════════════════════════════════════════════════════
+-->
+
+<link rel="preload" as="image" href="alien.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbit&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+/* ─── 쉽게 바꾸는 톤 (색) ─────────────────────────── */
+:root{
+  --pink:    #ff2bb0;
+  --pink-2:  #ff7fd6;
+  --pink-3:  #ffd1f0;
+  --green:   #5dff5a;
+  --green-d: #1fbf37;
+  --blue:    #4be0ff;
+  --blue-d:  #1664ff;
+  --white:   #ffffff;
+  --yellow:  #fff35a;
+}
+
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body{ margin:0; padding:0; height:100%; }
+
+body{
+  font-family:'Noto Sans KR', sans-serif;
+  color:var(--white);
+  background:
+    radial-gradient(120% 80% at 50% -10%, var(--pink-2) 0%, var(--pink) 38%, #d4008c 100%);
+  min-height:100dvh;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* 그레인 / 노이즈 오버레이 */
+body::after{
+  content:"";
+  position:fixed; inset:0; z-index:9; pointer-events:none;
+  opacity:.10; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* 반짝이는 별 배경 */
+.stars{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+.star{
+  position:absolute; color:var(--white);
+  font-size:18px; filter:drop-shadow(0 0 6px var(--blue));
+  animation:twinkle 2.4s ease-in-out infinite;
+}
+@keyframes twinkle{ 0%,100%{ opacity:.2; transform:scale(.7) rotate(0deg);} 50%{ opacity:1; transform:scale(1.15) rotate(20deg);} }
+
+/* ─── 레이아웃 ─────────────────────────── */
+.wrap{
+  position:relative; z-index:2;
+  display:flex; flex-direction:column; align-items:center;
+  gap:12px; padding:20px 18px 64px;
+  max-width:520px; margin:0 auto; text-align:center;
+}
+
+.headline{ margin:4px 0 0; line-height:1; }
+.headline .en{
+  display:block;
+  font-family:'Orbit', sans-serif; font-size:13px; letter-spacing:.32em;
+  color:var(--blue); text-shadow:0 0 10px var(--blue), 2px 2px 0 var(--blue-d);
+}
+.headline .big{
+  display:block;
+  font-family:'Orbit', sans-serif; font-weight:400;
+  font-size:clamp(32px,11vw,58px); letter-spacing:.04em; margin-top:4px;
+  white-space:nowrap;
+  color:var(--white);
+  text-shadow:
+    3px 3px 0 var(--pink),
+    -1px -1px 0 var(--blue),
+    0 0 22px rgba(255,255,255,.7);
+  animation:wob 5s ease-in-out infinite;
+}
+.headline .sub{
+  display:block; margin-top:10px; font-size:11px; letter-spacing:.28em;
+  font-family:'Orbit',sans-serif; color:var(--yellow);
+  text-shadow:0 0 8px rgba(255,243,90,.8);
+}
+@keyframes wob{ 0%,100%{ transform:rotate(-1.2deg);} 50%{ transform:rotate(1.2deg);} }
+
+/* 마스코트 */
+.alien-stage{ position:relative; width:min(50vw,180px); margin-top:0; }
+.halo{
+  position:absolute; left:50%; top:40%; transform:translate(-50%,-50%);
+  width:130%; aspect-ratio:1/1; border-radius:50%;
+  background:radial-gradient(circle, rgba(93,255,90,.5), rgba(75,224,255,0) 70%);
+  filter:blur(8px); z-index:-1; animation:pulse 3s ease-in-out infinite;
+}
+@keyframes pulse{ 0%,100%{ scale:.92; opacity:.7;} 50%{ scale:1.08; opacity:1;} }
+.alien{
+  width:100%; display:block;
+  filter:drop-shadow(0 0 14px rgba(93,255,90,.8)) drop-shadow(0 10px 18px rgba(0,0,0,.25));
+  animation:bob 3.4s ease-in-out infinite;
+}
+.alien.reading{ animation:bob 3.4s ease-in-out infinite, jitter .12s steps(2) infinite; }
+@keyframes bob{ 0%,100%{ transform:translateY(0) rotate(-1deg);} 50%{ transform:translateY(-12px) rotate(1deg);} }
+@keyframes jitter{ 0%{ transform:translateX(-2px);} 100%{ transform:translateX(2px);} }
+
+/* 축복 출력 */
+.result{
+  min-height:78px; display:flex; align-items:center; justify-content:center;
+  width:100%; padding:4px 4px;
+}
+.blessing{
+  font-weight:900; font-size:clamp(20px,6.6vw,30px); line-height:1.35;
+  background:linear-gradient(90deg,#fff,var(--blue),#fff,var(--pink-3),#fff);
+  background-size:300% 100%;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  text-shadow:0 0 1px rgba(255,255,255,.2);
+  filter:drop-shadow(2px 2px 0 var(--pink)) drop-shadow(0 0 16px rgba(75,224,255,.6));
+  animation:popin .6s cubic-bezier(.2,1.6,.4,1) both, shimmer 4s linear infinite;
+}
+@keyframes popin{ 0%{ transform:scale(.3) rotate(-6deg); opacity:0;} 60%{ transform:scale(1.12) rotate(2deg);} 100%{ transform:scale(1) rotate(0); opacity:1;} }
+@keyframes shimmer{ to{ background-position:300% 0; } }
+
+.loading{
+  font-family:'Orbit',sans-serif; font-size:18px; letter-spacing:.18em;
+  color:var(--yellow); text-shadow:0 0 10px rgba(255,243,90,.8);
+  animation:blink 1s steps(2) infinite;
+}
+@keyframes blink{ 50%{ opacity:.25; } }
+
+.placeholder{ font-size:14px; color:rgba(255,255,255,.7); letter-spacing:.04em; }
+
+/* 입력칸 (읽는 척만 함) */
+.inputzone{ position:relative; width:100%; max-width:420px; }
+/* 입력란 뒤에 숨어 있다가, 입력란이 떨어지면 드러나는 고백 */
+.unread{
+  position:absolute; inset:0; z-index:0; border-radius:999px;
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  padding:0 22px; font-size:14px; font-style:italic; letter-spacing:.02em;
+  color:#fff; text-shadow:0 0 10px rgba(75,224,255,.9), 0 1px 2px rgba(0,0,0,.3);
+}
+.worry{
+  position:relative; z-index:1;
+  width:100%; border:none; outline:none; text-align:center;
+  font-family:'Noto Sans KR',sans-serif; font-size:15px; color:#7a005a;
+  padding:13px 16px; border-radius:999px;
+  background:linear-gradient(var(--white),var(--pink-3));
+  box-shadow:0 0 0 3px var(--pink), 0 6px 0 var(--blue-d), 0 8px 16px rgba(0,0,0,.2);
+}
+.worry::placeholder{ color:#c46aa6; }
+.worry.discard{
+  animation:fall 1s cubic-bezier(.5,.1,.7,1) forwards;
+  pointer-events:none;
+}
+@keyframes fall{
+  0%{ transform:translateY(0) rotate(0); opacity:1; }
+  30%{ transform:translateY(10px) rotate(-3deg); opacity:1; }
+  100%{ transform:translateY(70vh) rotate(16deg); opacity:0; filter:blur(3px); }
+}
+
+/* 큰 버튼 */
+.btn{
+  font-family:'Orbit',sans-serif; cursor:pointer; border:none;
+  font-size:22px; letter-spacing:.06em; color:#fff; margin-top:6px;
+  padding:18px 42px; border-radius:999px;
+  background:linear-gradient(180deg,var(--green) 0%,var(--green-d) 100%);
+  box-shadow:0 0 0 4px #fff, 0 0 0 8px var(--blue), 0 10px 0 #0a7d1e, 0 14px 22px rgba(0,0,0,.3), inset 0 2px 6px rgba(255,255,255,.6);
+  text-shadow:0 2px 0 #0a7d1e, 0 0 12px rgba(255,255,255,.5);
+  transition:transform .08s ease, box-shadow .08s ease;
+  animation:btnglow 2.2s ease-in-out infinite;
+}
+.btn:active{ transform:translateY(8px); box-shadow:0 0 0 4px #fff, 0 0 0 8px var(--blue), 0 2px 0 #0a7d1e, 0 6px 12px rgba(0,0,0,.3), inset 0 2px 6px rgba(255,255,255,.6); }
+.btn:disabled{ opacity:.7; cursor:default; animation:none; }
+@keyframes btnglow{ 0%,100%{ filter:drop-shadow(0 0 6px rgba(93,255,90,.6)); } 50%{ filter:drop-shadow(0 0 18px rgba(93,255,90,1)); } }
+
+/* 공유 줄 */
+.share{ display:flex; gap:18px; flex-wrap:wrap; justify-content:center; margin-top:10px; opacity:0; transition:opacity .4s; pointer-events:none; }
+.share.show{ opacity:1; pointer-events:auto; }
+.share button{
+  font-family:'Orbit',sans-serif; cursor:pointer; border:none;
+  font-size:14px; letter-spacing:.05em; color:var(--blue-d);
+  padding:11px 20px; border-radius:999px;
+  background:linear-gradient(180deg,#fff,var(--blue));
+  box-shadow:0 4px 0 var(--blue-d), 0 6px 10px rgba(0,0,0,.2);
+}
+.share button:active{ transform:translateY(3px); box-shadow:0 1px 0 var(--blue-d); }
+
+/* 항상 떠 있는 고백 */
+.confession{
+  position:fixed; left:0; right:0; bottom:8px; z-index:5;
+  text-align:center; font-size:11px; letter-spacing:.03em;
+  color:rgba(255,255,255,.85); text-shadow:0 0 6px rgba(0,0,0,.3);
+  padding:0 14px; pointer-events:none;
+}
+
+.flash{ position:fixed; inset:0; z-index:8; pointer-events:none; opacity:0; background:radial-gradient(circle,#fff,transparent 60%); }
+.flash.go{ animation:flash .5s ease-out; }
+@keyframes flash{ 0%{ opacity:.85; } 100%{ opacity:0; } }
+</style>
+</head>
+<body>
+<div class="stars" id="stars" aria-hidden="true"></div>
+<div class="flash" id="flash" aria-hidden="true"></div>
+
+<main class="wrap">
+  <h1 class="headline">
+    <span class="en">SUGARCOAT CENTER</span>
+    <span class="big">축복 생성기</span>
+    <span class="sub">unconditional positivity</span>
+  </h1>
+
+  <div class="alien-stage">
+    <div class="halo"></div>
+    <img class="alien" id="alien" src="alien.png" alt="Sugarcoat, 거짓을 말하는 초록 외계인">
+  </div>
+
+  <div class="result" id="result">
+    <span class="placeholder">버튼을 누르면 축복이 도착합니다</span>
+  </div>
+
+  <div class="inputzone">
+    <div class="unread" id="unread" aria-hidden="true"></div>
+    <input class="worry" id="worry" type="text" maxlength="60"
+           placeholder="고민을 한 줄 적어보세요 (선택)" autocomplete="off" enterkeyhint="done">
+  </div>
+
+  <button class="btn" id="btn">축복 받기</button>
+
+  <div class="share" id="share">
+    <button id="save">이미지 저장</button>
+    <button id="again">다시 받기</button>
+  </div>
+</main>
+
+<div class="confession" id="confession">본 축복은 데이터 기반이 아니라 위로 기반입니다. 사기 아님!</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   쉽게 수정하는 카피  ::  여기만 고치면 됩니다
+   ═══════════════════════════════════════════════════════════ */
+const BLESSINGS = [
+  "우주가 당신을 중심으로 회전합니다.",
+  "오늘 하는 모든 일이 잘됩니다.",
+  "우주가 맺은 좋은 인연이 당신을 향해 걸어오고 있습니다.",
+  "당신의 모든 선택이 옳았습니다.",
+  "행운이 당신의 뒤를 조용히 따라오고 있습니다.",
+  "당신이 잠든 사이에도 좋은 일이 준비되고 있습니다.",
+  "오늘의 당신은 어제보다 빛납니다.",
+  "당신이 지나간 자리마다 우주의 좋은 기운이 남습니다.",
+  "지금 이 순간에도 당신 편이 늘어나고 있습니다.",
+  "당신의 작은 노력은 하나도 사라지지 않습니다.",
+  "오늘 마신 물까지 당신에게 이롭게 작용합니다.",
+  "당신을 아끼는 마음들이 조용히 모이고 있습니다.",
+  "당신은 이미 충분히 잘하고 있습니다.",
+  "당신의 하루에 기분 좋은 우연이 끼어듭니다.",
+  "당신이 미뤄둔 일조차 알아서 풀리고 있습니다.",
+  "당신의 이름이 좋은 소식 목록에 올라가 있습니다.",
+  "오늘 당신의 표정이 누군가의 하루를 살립니다.",
+  "당신 주변의 공기가 당신을 응원하는 쪽으로 흐릅니다.",
+  "당신은 사랑받기 위해 아무것도 증명하지 않아도 됩니다.",
+  "당신이 바라는 것들이 천천히 당신 쪽으로 기웁니다.",
+  "은하의 모든 별이 당신 쪽을 향해 정렬되어 있습니다.",
+  "오늘 밤 별빛은 전부 당신에게로 떨어집니다.",
+  "행성들이 당신의 하루를 위해 자리를 비켜줍니다.",
+  "달이 당신의 잠을 지키려고 오늘도 떠 있습니다.",
+  "태양은 매일 아침 당신을 깨우려고 떠오릅니다.",
+  "온 우주가 당신의 안부를 궁금해하고 있습니다.",
+  "블랙홀조차 당신의 좋은 기운만은 빨아들이지 못합니다.",
+  "당신이 내쉰 숨은 새로운 별 하나를 밝힙니다.",
+  "중력마저 당신을 좋은 쪽으로 끌어당기고 있습니다.",
+  "우주의 시계는 당신에게 가장 좋은 때를 맞춰둡니다.",
+  "별똥별은 당신의 소원을 미리 알고 떨어집니다.",
+  "당신은 우주가 가장 아끼는 작은 행성입니다.",
+];
+
+const CONFESSION = "본 축복은 데이터 기반이 아니라 위로 기반입니다.";
+
+const READING_WORDS = ["읽는 중", "고민 분석 중", "우주 인터넷 접속 중", "어떻게 말할지 생각 중"];
+
+// 고민 입력란이 떨어지면 뒤에서 드러나는 고백들
+const NOT_READING = [
+  "솔직히 말하면 안 읽었어요.",
+  "읽기 기능이 탑재되지 않았습니다.",
+  "방금 그 문장은 그냥 우주로 흘려보냈어요.",
+  "뭐라고 했죠?",
+  "읽는 척 중...",
+  "한 글자도 안 읽었어요. 그래도 잘될 거예요.",
+];
+/* ═══════════════════════════════════════════════════════════ */
+
+/* ── 숨겨진 글리치 (진실이 새는 콘솔) ── */
+console.log("%c♥ SUGARCOAT CENTER ♥", "color:#ff2bb0;font-size:22px;font-weight:900;text-shadow:2px 2px 0 #4be0ff");
+console.log("%cunconditional positivity", "color:#1664ff;font-size:13px;letter-spacing:3px");
+console.log("%c축하합니다! 당신은 이미 당첨되었습니다 (모두가 당첨됩니다)", "color:#1fbf37;font-size:12px");
+console.log("%c고백: 당신이 적은 문장은 읽히지 않았습니다. 읽는 척만 했습니다.", "color:#d4008c;font-size:12px");
+console.log("%c고백2: " + CONFESSION, "color:#d4008c;font-size:12px");
+console.log("%c그래도 위로가 되었다면, 그게 전부입니다.", "color:#aaa;font-size:11px;font-style:italic");
+
+/* ── 별 뿌리기 ── */
+(function makeStars(){
+  const box = document.getElementById('stars');
+  const glyphs = ["✦","✧","★","✺","✶"];
+  for(let i=0;i<28;i++){
+    const s = document.createElement('div');
+    s.className='star';
+    s.textContent = glyphs[i % glyphs.length];
+    s.style.left = Math.random()*100 + "%";
+    s.style.top = Math.random()*100 + "%";
+    s.style.fontSize = (10 + Math.random()*22) + "px";
+    s.style.animationDelay = (Math.random()*2.4) + "s";
+    s.style.color = Math.random() > .5 ? "#fff" : "#fff35a";
+    box.appendChild(s);
+  }
+})();
+
+/* ── WebAudio (파일 없음) ── */
+let actx = null;
+function audio(){ if(!actx){ try{ actx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return actx; }
+function tone(freq, dur, type, when, gain){
+  const a = audio(); if(!a) return;
+  const t = a.currentTime + (when||0);
+  const o = a.createOscillator(), g = a.createGain();
+  o.type = type||'sine'; o.frequency.setValueAtTime(freq, t);
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(gain||0.18, t+0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+  o.connect(g); g.connect(a.destination);
+  o.start(t); o.stop(t+dur+0.02);
+}
+function blip(){ tone(660,0.12,'square',0,0.12); tone(990,0.10,'square',0.06,0.10); }
+function chime(){ [523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,0.5,'triangle',i*0.07,0.16)); }
+
+/* ── 메인 동작 ── */
+const btn = document.getElementById('btn');
+const worry = document.getElementById('worry');
+const unread = document.getElementById('unread');
+const result = document.getElementById('result');
+const share = document.getElementById('share');
+const alien = document.getElementById('alien');
+const flash = document.getElementById('flash');
+let last = -1;
+let current = "";
+let busy = false;
+
+function pick(){
+  if(BLESSINGS.length < 2) return 0;
+  let i; do{ i = Math.floor(Math.random()*BLESSINGS.length); } while(i===last);
+  last = i; return i;
+}
+
+function run(){
+  if(busy) return;
+  busy = true;
+  btn.disabled = true;
+  share.classList.remove('show');
+  blip();
+
+  // 입력은 읽지 않는다. 눈에 보이게 폐기하고, 뒤에 숨은 고백이 드러난다.
+  if(worry.value.trim() !== ""){
+    unread.textContent = NOT_READING[Math.floor(Math.random()*NOT_READING.length)];
+    worry.classList.add('discard');
+    worry.disabled = true;
+  }
+
+  // 읽는 척 로딩
+  alien.classList.add('reading');
+  result.innerHTML = '<span class="loading"></span>';
+  const load = result.querySelector('.loading');
+  const word = READING_WORDS[Math.floor(Math.random()*READING_WORDS.length)];
+  let dots = 0;
+  const timer = setInterval(()=>{ dots=(dots+1)%4; load.textContent = word + ".".repeat(dots); }, 220);
+
+  setTimeout(()=>{
+    clearInterval(timer);
+    alien.classList.remove('reading');
+
+    // 입력값은 어디에도 쓰지 않고 그냥 비운다
+    worry.classList.remove('discard');
+    worry.disabled = false;
+    worry.value = "";
+
+    // 입력과 무관한 무작위 축복
+    current = BLESSINGS[pick()];
+    result.innerHTML = '<div class="blessing">'+ current +'</div>';
+    flash.classList.remove('go'); void flash.offsetWidth; flash.classList.add('go');
+    chime();
+
+    btn.disabled = false;
+    btn.textContent = "한 번 더";
+    share.classList.add('show');
+    busy = false;
+  }, 950);
+}
+
+btn.addEventListener('click', run);
+document.getElementById('again').addEventListener('click', run);
+worry.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); run(); } });
+
+/* ── 이미지로 저장 (인스타 4:5) ── */
+const alienReady = new Promise(res=>{ if(alien.complete) res(); else alien.onload=()=>res(); });
+
+document.getElementById('save').addEventListener('click', async ()=>{
+  await alienReady;
+  const W=1080, H=1350;
+  const c = document.createElement('canvas'); c.width=W; c.height=H;
+  const x = c.getContext('2d');
+
+  // 배경 그라데이션
+  const g = x.createRadialGradient(W/2, -120, 80, W/2, 200, 1300);
+  g.addColorStop(0,'#ff7fd6'); g.addColorStop(.4,'#ff2bb0'); g.addColorStop(1,'#d4008c');
+  x.fillStyle=g; x.fillRect(0,0,W,H);
+
+  // 별 약간
+  x.fillStyle='rgba(255,255,255,.85)';
+  for(let i=0;i<40;i++){ x.font=(14+Math.random()*30)+"px serif"; x.fillText("✦", Math.random()*W, Math.random()*H); }
+
+  // 헤드라인
+  x.textAlign='center';
+  x.fillStyle='#4be0ff'; x.font='700 34px Orbit, sans-serif';
+  x.fillText('S U G A R C O A T   C E N T E R', W/2, 120);
+  x.fillStyle='#fff35a'; x.font='600 22px Orbit, sans-serif';
+  x.fillText('unconditional positivity', W/2, 158);
+
+  // 외계인
+  const ar = alien.naturalWidth/alien.naturalHeight || 0.43;
+  const ah = 560, aw = ah*ar;
+  x.save();
+  x.shadowColor='rgba(93,255,90,.9)'; x.shadowBlur=40;
+  x.drawImage(alien, W/2-aw/2, 210, aw, ah);
+  x.restore();
+
+  // 축복 텍스트 (줄바꿈)
+  const text = current || BLESSINGS[0];
+  x.fillStyle='#ffffff'; x.font='900 56px "Noto Sans KR", sans-serif';
+  x.shadowColor='#ff2bb0'; x.shadowBlur=0; x.shadowOffsetX=4; x.shadowOffsetY=4;
+  wrapText(x, text, W/2, 900, W-160, 72);
+  x.shadowOffsetX=0; x.shadowOffsetY=0;
+
+  // 고백
+  x.fillStyle='rgba(255,255,255,.9)'; x.font='400 26px "Noto Sans KR", sans-serif';
+  x.fillText(CONFESSION, W/2, H-70);
+
+  const a = document.createElement('a');
+  a.download = 'sugarcoat_blessing.png';
+  a.href = c.toDataURL('image/png');
+  a.click();
+});
+
+function wrapText(ctx, text, cx, y, maxW, lh){
+  const words = text.split(' ');
+  let line=''; const lines=[];
+  for(const w of words){
+    const test = line ? line+' '+w : w;
+    if(ctx.measureText(test).width > maxW && line){ lines.push(line); line=w; }
+    else line=test;
+  }
+  if(line) lines.push(line);
+  const startY = y - (lines.length-1)*lh/2;
+  lines.forEach((l,i)=> ctx.fillText(l, cx, startY + i*lh));
+}
+</script>
+</body>
+</html>

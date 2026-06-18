@@ -335,6 +335,43 @@
   .error-popup .titlebar .titlebar-title { color: var(--darker); }
   .error-popup-body { padding: 16px; line-height: 2; color: var(--purple); }
 
+  /* ── SPAM BANNER (충돌 직후 새어 나오는 통로: Sugarcoat 로 연결) ── */
+  .spam-banner {
+    display: none; position: fixed;
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 300px; max-width: 88vw;
+    background: var(--darker); border: 2px solid #FFD700;
+    box-shadow: 0 0 24px #FFD700, 0 0 60px rgba(255,215,0,0.4);
+    z-index: 100000; font-size: 10px;
+  }
+  .spam-banner.show {
+    display: block;
+    animation: spamPop 0.45s cubic-bezier(.2,1.6,.4,1) forwards;
+  }
+  @keyframes spamPop {
+    0%   { opacity: 0; transform: translate(-50%,-50%) scale(0.3) rotate(-6deg); }
+    60%  { transform: translate(-50%,-50%) scale(1.08) rotate(2deg); }
+    100% { opacity: 1; transform: translate(-50%,-50%) scale(1) rotate(0); }
+  }
+  .spam-banner .titlebar { background: linear-gradient(90deg,#FFD700,#a87f00); border-bottom: 1px solid #FFD700; }
+  .spam-banner .titlebar-title { color: var(--darker); text-shadow: none; }
+  .spam-banner .titlebar-btns span { color: var(--darker); cursor: pointer; font-weight: bold; }
+  .spam-link { text-decoration: none; display: block; cursor: pointer; }
+  .spam-body { padding: 16px 14px; text-align: center; color: #FFD700; line-height: 1.7; }
+  .spam-burst { font-size: 34px; animation: goldPulse 1.2s infinite; }
+  .spam-headline {
+    font-family: 'Galmuri11', monospace; font-size: 12px; color: #fff;
+    text-shadow: 0 0 8px #FFD700; margin: 8px 0; letter-spacing: 1px; line-height: 1.6;
+  }
+  .spam-sub { font-family: 'Gothic A1', sans-serif; font-size: 10px; color: var(--purple); margin-bottom: 12px; }
+  .spam-cta {
+    font-family: 'Galmuri11', monospace; font-size: 10px; letter-spacing: 2px;
+    color: var(--darker); background: #FFD700; padding: 11px; border: 1px solid #fff;
+    animation: goldPulse 1.6s infinite;
+  }
+  .spam-link:hover .spam-cta { background: #fff; }
+  .spam-fine { margin-top: 10px; font-size: 8px; color: var(--cyan-dim); letter-spacing: 1px; font-family: 'Galmuri11', monospace; }
+
   /* ── BUG POPUPS (loading) ── */
   .bug-popup {
     position: fixed;
@@ -599,6 +636,23 @@
   <div class="error-popup-body" id="errorMsg"></div>
 </div>
 
+<!-- SPAM BANNER (충돌 직후 새어 나오는 통로: Sugarcoat 로 연결) -->
+<div class="spam-banner" id="spamBanner">
+  <div class="titlebar">
+    <span class="titlebar-title">★ 당첨 안내 // YOU WON ★</span>
+    <div class="titlebar-btns"><span onclick="closeSpamBanner()">×</span></div>
+  </div>
+  <a class="spam-link" href="../sugarcoat/">
+    <div class="spam-body">
+      <div class="spam-burst">🎉</div>
+      <div class="spam-headline">축하합니다!<br>당신은 무조건 당첨되셨습니다</div>
+      <div class="spam-sub">1,000,000번째 방문자에게 드리는<br>무료 축복 1회가 도착했습니다</div>
+      <div class="spam-cta">무료 축복 받기 ▶ CLAIM NOW</div>
+      <div class="spam-fine">본 당첨은 데이터 기반이 아닙니다</div>
+    </div>
+  </a>
+</div>
+
 <!-- MAIN WINDOW -->
 <div class="window" id="mainWindow">
   <div class="titlebar">
@@ -609,7 +663,7 @@
   <div class="window-body">
 
     <div class="mascot-wrap">
-      <div class="mascot" id="mascot" onclick="mascotClick()">👾</div>
+      <div class="mascot" id="mascot">👾</div>
       <div class="mascot-speech" id="mascotSpeech">당신의 데이터를 입력하세요...</div>
     </div>
 
@@ -1268,8 +1322,11 @@ document.addEventListener('click', () => { startBgm(); }, { once: true });
 
 // ── CLOSE BUTTON ERROR ───────────────────────────────────
 
+let closeAttempts = 0;
 function triggerCloseError() {
   document.getElementById('closeErrorPopup').style.display = 'block';
+  // 창을 계속 닫으려 하면(3회) 시스템이 포기하고 스팸이 새어 나온다
+  if (++closeAttempts >= 3) leakSpamBanner();
 }
 function dismissCloseError() {
   document.getElementById('closeErrorPopup').style.display = 'none';
@@ -1388,8 +1445,39 @@ function triggerFullErrorOverlay() {
       overlay.classList.remove('active');
       overlay.style.opacity = '';
       overlay.style.transition = '';
+      if (Math.random() < 0.5) setTimeout(leakSpamBanner, 350);
     }, 500);
   }, 3000);
+}
+
+// ── SPAM BANNER ───────────────────────────────────────────
+// 시스템이 무너진 직후, 숨겨둔 거짓이 드러난 거짓으로 새어 나온다.
+// 한 방향(Oracle → Sugarcoat)으로만 통하는 다리. 세션당 한 번.
+let spamShown = false;
+function leakSpamBanner() {
+  if (spamShown) return;
+  spamShown = true;
+  try { playSfx('coin'); } catch (e) {}
+  document.getElementById('spamBanner').classList.add('show');
+  for (let i = 0; i < 12; i++) {
+    setTimeout(() => {
+      const c = document.createElement('div');
+      c.className = 'coin';
+      c.textContent = '✨';
+      c.style.left = (Math.random() * (window.innerWidth - 40)) + 'px';
+      c.style.top = '-40px';
+      const d = 1400 + Math.random() * 900;
+      c.style.animationDuration = d + 'ms';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), d + 100);
+    }, i * 70);
+  }
+}
+function closeSpamBanner() {
+  const b = document.getElementById('spamBanner');
+  b.style.transition = 'opacity 0.2s';
+  b.style.opacity = '0';
+  setTimeout(() => { b.classList.remove('show'); b.style.opacity = ''; b.style.transition = ''; }, 200);
 }
 
 // ── BUG POPUP QUEUE ───────────────────────────────────────
@@ -1462,9 +1550,17 @@ function resetOracle() {
   }, 1500);
 }
 
+let mascotClicks = 0, mascotClickTimer = null;
 function mascotClick() {
   document.getElementById('mascot').textContent = MASCOT_VARIANTS[Math.floor(Math.random() * MASCOT_VARIANTS.length)];
+  // 마스코트를 연타하면(2.4초 안에 7번) 숨겨둔 통로가 열린다
+  mascotClicks++;
+  clearTimeout(mascotClickTimer);
+  mascotClickTimer = setTimeout(() => { mascotClicks = 0; }, 2400);
+  if (mascotClicks >= 7) leakSpamBanner();
 }
+// click 대신 pointerdown: 마스코트가 떠다니거나 회전해도 누름 즉시 확실히 카운트된다
+document.getElementById('mascot').addEventListener('pointerdown', mascotClick);
 
 // Idle speech rotation
 setInterval(() => {

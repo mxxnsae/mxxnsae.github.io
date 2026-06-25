@@ -374,6 +374,186 @@ body { padding-left: 48px; }
 }
 
 /* ══════════════════════════
+   CONCEPT — CYBER-SACCHARINE
+══════════════════════════ */
+#concept {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  /* top fades from hero's pink/mint tint down into black */
+  background:
+    linear-gradient(180deg,
+      rgba(255, 179, 217, 0.45) 0%,
+      rgba(150, 225, 220, 0.22) 9%,
+      rgba(40, 14, 32, 0.4) 22%,
+      rgba(5, 2, 8, 0) 34%),
+    #050208;
+  color: #f4eef8;
+  padding: 80px 40px;
+  /* Extend full width behind sidenav (desktop only) */
+  margin-left: -48px;
+  width: calc(100% + 48px);
+  padding-left: 88px;
+  gap: 44px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+#concept.is-visible { opacity: 1; transform: translateY(0); }
+/* faint scanline / system texture */
+#concept::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px,
+    transparent 1px, transparent 4px);
+  pointer-events: none;
+  opacity: 0.6;
+}
+#concept > * { position: relative; z-index: 1; }
+
+.concept-title {
+  font-size: clamp(44px, 8vw, 104px);
+  line-height: 1;
+  letter-spacing: 2px;
+  text-align: center;
+  margin-bottom: -8px;
+}
+.concept-title .cyber {
+  font-family: 'Orbit', sans-serif;
+  font-weight: 400;
+  color: #eaf6ff;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+}
+.concept-title .saccharine {
+  font-family: 'Ballet', cursive;
+  font-weight: 400;
+  color: var(--pink);
+  letter-spacing: 2px;
+  text-shadow: 0 0 24px rgba(255, 20, 147, 0.55), 0 0 60px rgba(255, 20, 147, 0.25);
+}
+.concept-sub {
+  font-family: 'Suit', sans-serif;
+  font-size: clamp(13px, 1.6vw, 17px);
+  font-weight: 300;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: #b9a9c9;
+}
+
+.concept-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  max-width: 640px;
+}
+.concept-lines p {
+  font-family: 'Suit', sans-serif;
+  font-size: clamp(15px, 1.9vw, 20px);
+  font-weight: 300;
+  line-height: 1.6;
+  color: #d9cfe4;
+}
+.concept-lines p .hl { color: var(--pink); font-weight: 500; }
+
+/* ── 2-layer diagram ── */
+.concept-diagram {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: 560px;
+}
+.layer {
+  border-radius: 14px;
+  padding: 20px 26px;
+  text-align: center;
+}
+.layer-label {
+  font-family: 'Suit', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.layer-desc {
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+.layer-sweet {
+  background: radial-gradient(120% 160% at 50% 0%, rgba(255,20,147,0.22), rgba(255,20,147,0.06));
+  border: 1px solid rgba(255, 20, 147, 0.45);
+  box-shadow: 0 0 30px rgba(255, 20, 147, 0.25), inset 0 0 24px rgba(255, 20, 147, 0.12);
+}
+.layer-sweet .layer-label { color: var(--pink); }
+.layer-sweet .layer-desc { font-family: 'Suit', sans-serif; font-weight: 300; color: #ffd9ee; }
+
+.layer-system {
+  background: #0a0a0c;
+  border: 1px solid #2a2730;
+}
+.layer-system .layer-label { color: #8d8696; }
+.layer-system .layer-desc {
+  font-family: 'DosHandwriting', monospace;
+  color: #6f6878;
+  letter-spacing: 2px;
+}
+
+.glitch-band {
+  font-family: 'DosHandwriting', monospace;
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-align: center;
+  color: #f0e8f5;
+  padding: 9px 0;
+  margin: -2px 0;
+  background: rgba(255, 20, 147, 0.06);
+  border-left: 1px dashed rgba(255, 20, 147, 0.4);
+  border-right: 1px dashed rgba(255, 20, 147, 0.4);
+  animation: rgbSplit 2.4s steps(1) infinite;
+}
+/* chromatic aberration — red/cyan channels separate */
+@keyframes rgbSplit {
+  0%, 100% { text-shadow: -2px 0 rgba(255,0,60,0.9), 2px 0 rgba(0,225,255,0.9); }
+  20%      { text-shadow:  2px 0 rgba(255,0,60,0.9), -2px 0 rgba(0,225,255,0.9); }
+  40%      { text-shadow: -1px 0 rgba(255,0,60,0.9), 1px 0 rgba(0,225,255,0.9); }
+  60%      { text-shadow:  3px 0 rgba(255,0,60,0.9), -3px 0 rgba(0,225,255,0.9); }
+  80%      { text-shadow: -2px 0 rgba(255,0,60,0.9), 2px 0 rgba(0,225,255,0.9); }
+}
+
+.concept-cue {
+  font-family: 'Orbit', sans-serif;
+  font-size: 24px;
+  color: #6f6878;
+  letter-spacing: 4px;
+  cursor: pointer;
+  animation: cueHint 2s ease-in-out infinite;
+  transition: color 0.3s ease;
+}
+.concept-cue:hover { color: var(--pink); }
+
+@media(max-width:768px){
+  #concept {
+    margin-left: 0;
+    width: 100%;
+    padding: 72px 24px;
+    gap: 32px;
+  }
+  .concept-title { letter-spacing: 1px; }
+  .concept-title .cyber { letter-spacing: 3px; }
+  .concept-sub { letter-spacing: 5px; }
+}
+
+/* ══════════════════════════
    SECTION WRAPPER
 ══════════════════════════ */
 .page-section {
@@ -964,7 +1144,7 @@ footer a:hover { color: var(--pink); }
       <div class="nameplate-sub">Chaerin Jang — Media Artist</div>
     </div>
     <div class="desktop-icons">
-      <div class="desktop-icon" onclick="goToSection('artwork-main')">
+      <div class="desktop-icon" onclick="goToSection('concept')">
         <img src="hero/icon_1.gif" alt="Artwork" class="icon-img">
         <div class="icon-label">Artwork</div>
       </div>
@@ -981,8 +1161,36 @@ footer a:hover { color: var(--pink); }
         <div class="icon-label">???</div>
       </div>
     </div>
-    <div class="scroll-cue" onclick="goToSection('artwork-main')" style="cursor: pointer;">▼</div>
+    <div class="scroll-cue" onclick="goToSection('concept')" style="cursor: pointer;">▼</div>
   </div>
+</section>
+
+<!-- ══════ CONCEPT — CYBER-SACCHARINE ══════ -->
+<section id="concept">
+  <div>
+    <div class="concept-title"><span class="cyber">Cyber</span><span class="saccharine">Saccharine</span></div>
+    <div class="concept-sub">artificial sweetness</div>
+  </div>
+
+  <div class="concept-lines">
+    <p>A sweet illusion that we are <span class="hl">perfectly understood</span>. That feeling is <span class="hl">designed</span>.</p>
+    <p>In Taoism, the visible surface and the hidden depth are one.<br>The sweetness and the system collecting your data are <span class="hl">inseparable</span>.</p>
+    <p>When the system breaks, it doesn't just fail — it reveals this <span class="hl">true, unified body</span>.</p>
+  </div>
+
+  <div class="concept-diagram">
+    <div class="layer layer-sweet">
+      <div class="layer-label">Sweet Interface</div>
+      <div class="layer-desc">comfort · understanding · seduction</div>
+    </div>
+    <div class="glitch-band">▚ GLITCH · HALLUCINATION · MALFUNCTION ▚</div>
+    <div class="layer layer-system">
+      <div class="layer-label">Hidden System</div>
+      <div class="layer-desc">data collection · behavior shaping · surveillance</div>
+    </div>
+  </div>
+
+  <div class="concept-cue" onclick="goToSection('artwork-main')">▼</div>
 </section>
 
 <hr class="section-divider">
@@ -1445,6 +1653,19 @@ updateClock();
 
 renderMain();
 renderOther();
+
+// ── CONCEPT SECTION FADE ────────────────────────────────────
+(function() {
+  const el = document.getElementById('concept');
+  if (!el) return;
+  function check() {
+    const r = el.getBoundingClientRect();
+    const inView = r.top < window.innerHeight * 0.92 && r.bottom > 0;
+    el.classList.toggle('is-visible', inView);
+  }
+  window.addEventListener('scroll', check, { passive: true });
+  check(); // run once on load in case already in view
+})();
 
 // ── PIXEL FILTER RESPONSIVE ────────────────────────────────
 function updatePixelRadius() {

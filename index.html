@@ -400,10 +400,9 @@ body { padding-left: 48px; }
   padding-left: 88px;
   gap: 44px;
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transition: opacity 0.7s ease;
 }
-#concept.is-visible { opacity: 1; transform: translateY(0); }
+#concept.is-visible { opacity: 1; }
 /* faint scanline / system texture */
 #concept::before {
   content: "";
@@ -1173,7 +1172,7 @@ footer a:hover { color: var(--pink); }
   </div>
 
   <div class="concept-lines">
-    <p>A sweet illusion that we are <span class="hl">perfectly understood</span>. That feeling is <span class="hl">designed</span>.</p>
+    <p>A <span class="hl">sweet illusion</span> that we are perfectly understood.<br>That feeling is <span class="hl">designed</span>.</p>
     <p>In Taoism, the visible surface and the hidden depth are one.<br>The sweetness and the system collecting your data are <span class="hl">inseparable</span>.</p>
     <p>When the system breaks, it doesn't just fail — it reveals this <span class="hl">true, unified body</span>.</p>
   </div>
@@ -1660,11 +1659,21 @@ renderOther();
   if (!el) return;
   function check() {
     const r = el.getBoundingClientRect();
-    const inView = r.top < window.innerHeight * 0.92 && r.bottom > 0;
+    const inView = r.top < window.innerHeight * 0.85 && r.bottom > window.innerHeight * 0.1;
     el.classList.toggle('is-visible', inView);
   }
   window.addEventListener('scroll', check, { passive: true });
-  check(); // run once on load in case already in view
+  document.addEventListener('scroll', check, { passive: true });
+  check();
+
+  // Also re-check after any smooth-scroll ends (covers goToSection calls)
+  const _orig = window.goToSection;
+  window.goToSection = function(id) {
+    _orig && _orig(id);
+    // poll during smooth scroll
+    let t = 0;
+    const iv = setInterval(() => { check(); if (++t > 20) clearInterval(iv); }, 80);
+  };
 })();
 
 // ── PIXEL FILTER RESPONSIVE ────────────────────────────────

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <title>CYBER-SACCHARINE — Chaerin Jang</title>
 <link rel="preload" as="image" href="hero/hero.jpg">
 <style>
@@ -1683,6 +1684,37 @@ renderOther();
     for (const e of entries) el.classList.toggle('is-visible', e.isIntersecting);
   }, { threshold: 0.15 });
   obs.observe(el);
+})();
+
+// ── WHEEL-DRIVEN INTRO SNAP (hero ↔ concept; works list scrolls free) ──
+(function() {
+  const hero = document.getElementById('desktop');
+  const concept = document.getElementById('concept');
+  if (!hero || !concept) return;
+  if (!window.matchMedia || !window.matchMedia('(pointer:fine)').matches) return; // wheel devices only
+
+  let locked = false;
+  const topOf = (el) => el.getBoundingClientRect().top + window.scrollY;
+  const inIntroZone = () => window.scrollY < topOf(concept) + window.innerHeight * 0.5;
+
+  function go(toConcept) {
+    locked = true;
+    window.scrollTo({ top: toConcept ? topOf(concept) : 0, behavior: 'smooth' });
+    setTimeout(() => { locked = false; }, 950); // swallow inertia, one move per gesture
+  }
+
+  window.addEventListener('wheel', (e) => {
+    if (!inIntroZone()) return;            // free scroll once in the works list
+    if (locked) { e.preventDefault(); return; } // ignore inertia tail during animation
+    const y = window.scrollY, ct = topOf(concept);
+    if (e.deltaY > 0) {                    // scrolling down
+      if (y < ct - 8) { e.preventDefault(); go(true); }   // hero → concept
+      // at concept: let it scroll freely down into the works list
+    } else {                               // scrolling up
+      if (y > ct + 8) { e.preventDefault(); go(true); }   // below concept → settle to concept
+      else if (y > 8) { e.preventDefault(); go(false); }  // concept → hero
+    }
+  }, { passive: false });
 })();
 
 // ── PIXEL FILTER RESPONSIVE ────────────────────────────────

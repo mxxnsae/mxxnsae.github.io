@@ -384,14 +384,7 @@ body { padding-left: 48px; }
   justify-content: center;
   position: relative;
   overflow: hidden;
-  /* top fades from hero's pink/mint tint down into black */
-  background:
-    linear-gradient(180deg,
-      rgba(255, 179, 217, 0.45) 0%,
-      rgba(150, 225, 220, 0.22) 9%,
-      rgba(40, 14, 32, 0.4) 22%,
-      rgba(5, 2, 8, 0) 34%),
-    #050208;
+  background: #050208;
   color: #f4eef8;
   padding: 80px 40px;
   /* Extend full width behind sidenav (desktop only) */
@@ -399,12 +392,26 @@ body { padding-left: 48px; }
   width: calc(100% + 48px);
   padding-left: 88px;
   gap: 44px;
-  opacity: 0;
-  transition: opacity 0.7s ease;
 }
-#concept.is-visible { opacity: 1; }
-/* faint scanline / system texture */
+/* hero image continues at top, dimmed by translucent black, melting into darkness */
 #concept::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 78vh;
+  background-image:
+    linear-gradient(rgba(5, 2, 8, 0.55), rgba(5, 2, 8, 0.55)),
+    url('hero/hero.jpg');
+  background-size: cover, cover;
+  background-position: center, center bottom;
+  background-repeat: no-repeat, no-repeat;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 50%, transparent 88%);
+          mask-image: linear-gradient(to bottom, #000 0%, #000 50%, transparent 88%);
+  pointer-events: none;
+  z-index: 0;
+}
+/* faint scanline / system texture */
+#concept::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -413,8 +420,20 @@ body { padding-left: 48px; }
     transparent 1px, transparent 4px);
   pointer-events: none;
   opacity: 0.6;
+  z-index: 0;
 }
-#concept > * { position: relative; z-index: 1; }
+/* content sits above background; fades in on scroll (background stays static) */
+#concept > * {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+#concept.is-visible > * { opacity: 1; transform: translateY(0); }
+#concept.is-visible > *:nth-child(2) { transition-delay: 0.12s; }
+#concept.is-visible > *:nth-child(3) { transition-delay: 0.24s; }
+#concept.is-visible > *:nth-child(4) { transition-delay: 0.36s; }
 
 .concept-title {
   font-size: clamp(44px, 8vw, 104px);
@@ -1653,27 +1672,15 @@ updateClock();
 renderMain();
 renderOther();
 
-// ── CONCEPT SECTION FADE ────────────────────────────────────
+// ── CONCEPT CONTENT REVEAL (background stays static) ────────
 (function() {
   const el = document.getElementById('concept');
   if (!el) return;
-  function check() {
-    const r = el.getBoundingClientRect();
-    const inView = r.top < window.innerHeight * 0.85 && r.bottom > window.innerHeight * 0.1;
-    el.classList.toggle('is-visible', inView);
-  }
-  window.addEventListener('scroll', check, { passive: true });
-  document.addEventListener('scroll', check, { passive: true });
-  check();
-
-  // Also re-check after any smooth-scroll ends (covers goToSection calls)
-  const _orig = window.goToSection;
-  window.goToSection = function(id) {
-    _orig && _orig(id);
-    // poll during smooth scroll
-    let t = 0;
-    const iv = setInterval(() => { check(); if (++t > 20) clearInterval(iv); }, 80);
-  };
+  if (!('IntersectionObserver' in window)) { el.classList.add('is-visible'); return; }
+  const obs = new IntersectionObserver((entries) => {
+    for (const e of entries) el.classList.toggle('is-visible', e.isIntersecting);
+  }, { threshold: 0.15 });
+  obs.observe(el);
 })();
 
 // ── PIXEL FILTER RESPONSIVE ────────────────────────────────

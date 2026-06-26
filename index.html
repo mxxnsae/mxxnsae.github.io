@@ -5,6 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <title>CYBER-SACCHARINE — Chaerin Jang</title>
+<script>
+// Self-heal: a stale service worker from another project on this github.io
+// origin can keep serving an old cached page. Unregister any SW + clear caches.
+(function () {
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.getRegistrations().then(function (regs) {
+    if (!regs.length) return;
+    Promise.all(regs.map(function (r) { return r.unregister(); })).then(function () {
+      if (window.caches && caches.keys) {
+        caches.keys().then(function (keys) { keys.forEach(function (k) { caches.delete(k); }); });
+      }
+      // if a SW still controls this page, reload once to fetch the live version
+      if (navigator.serviceWorker.controller && !sessionStorage.getItem('sw_cleared')) {
+        sessionStorage.setItem('sw_cleared', '1');
+        location.reload();
+      }
+    });
+  });
+})();
+</script>
 <link rel="preload" as="image" href="hero/hero.jpg">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Ballet&family=Charm:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Orbit&display=swap');

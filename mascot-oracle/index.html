@@ -415,7 +415,7 @@
     width: 56px;
     z-index: 9100;
     cursor: pointer;
-    animation: flyAround 18s ease-in-out infinite alternate;
+    animation: flyAround 44s ease-in-out infinite alternate;
     filter: drop-shadow(0 0 8px rgba(0,255,255,0.6));
     transition: filter 0.2s, transform 0.2s;
   }
@@ -424,15 +424,13 @@
     transform: scale(1.15);
     animation-play-state: paused;
   }
+  /* 창을 가리지 않도록 좌우 거터와 아래 가장자리로만 천천히 돈다 */
   @keyframes flyAround {
-    0%   { top: 12vh;  left: 10vw;  transform: rotate(-8deg); }
-    15%  { top: 60vh;  left: 75vw;  transform: rotate(12deg); }
-    30%  { top: 20vh;  left: 55vw;  transform: rotate(-5deg); }
-    45%  { top: 75vh;  left: 20vw;  transform: rotate(15deg); }
-    60%  { top: 40vh;  left: 85vw;  transform: rotate(-10deg); }
-    75%  { top: 80vh;  left: 50vw;  transform: rotate(8deg); }
-    90%  { top: 25vh;  left: 30vw;  transform: rotate(-14deg); }
-    100% { top: 55vh;  left: 8vw;   transform: rotate(10deg); }
+    0%   { top: 9vh;   left: 3vw;   transform: rotate(-7deg); }
+    25%  { top: 84vh;  left: 3vw;   transform: rotate(7deg); }
+    50%  { top: 87vh;  left: 88vw;  transform: rotate(-5deg); }
+    75%  { top: 12vh;  left: 89vw;  transform: rotate(8deg); }
+    100% { top: 9vh;   left: 86vw;  transform: rotate(-6deg); }
   }
 
   /* ── STICKERS ── */
